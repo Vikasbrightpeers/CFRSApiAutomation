@@ -1,0 +1,25 @@
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:17 Response Status Code: 200
+INFO     root:test_registrations.py:25 Candidate Registration added successfully with correct response.
+INFO     root:test_registrations.py:28 Registration ID: 342
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:46 Response Status Code: 200
+INFO     root:test_registrations.py:54 Pre-Candidate Registration added successfully with correct response.
+INFO     root:test_registrations.py:57 Registration ID: 343
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:75 Response Status Code: 200
+INFO     root:test_registrations.py:83 Political Action Committee Registration added successfully with correct response.
+INFO     root:test_registrations.py:86 Registration ID: 344
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:104 Response Status Code: 200
+INFO     root:test_registrations.py:112 Political Party Committee / Caucus Campaign Committee Registration added successfully with correct response.
+INFO     root:test_registrations.py:116 Registration ID: 345
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:135 Response Status Code: 200
+INFO     root:test_registrations.py:143 Independent Expenditure Committee(individual) Registration added successfully with correct response.
+INFO     root:test_registrations.py:147 Registration ID: 346
+INFO     root:utils.py:28 Token fetched successfully.
+INFO     root:test_registrations.py:165 Response Status Code: 200
+INFO     root:test_registrations.py:173 Independent Expenditure Committee(organization) Registration added successfully with correct response.
+INFO     root:test_registrations.py:177 Registration ID: 347
+-
