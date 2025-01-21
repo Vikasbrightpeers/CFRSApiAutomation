@@ -3,6 +3,20 @@
 dev_auth_url = 'https://cfs-auth-dev.tgstechnology.net/'
 dev_login_url = 'api/Auth/login'
 
+
+dev_my_admin_role_list = 'api/Auth/AdminDashboard/getMyAdminRoleList'
+dev_admin_notes_category = 'api/Auth/AdministrativeNotes/getAllAdminNotesCategory'
+dev_administrative_data_list = 'api/Auth/AdministrativeNotes/getAdministrativeNoteDataList'
+dev_add_administrative_notes = 'api/Auth/AdministrativeNotes/addAdministrativeNote'
+save_security_question_info = 'api/Auth/saveSecurityQuestionInfo'
+add_and_update_user = 'api/Auth/ManageUsers/addAndUpdateUser'
+get_all_security_questions = 'api/Auth/getAllSecurityQuestions'
+verify_user_question_and_answer = 'api/Auth/verifyUserQuestionAndAnswer'
+forgot_username = 'api/Auth/forgotUsername'
+get_website_configuration = 'api/Auth/AppConfigure/getWebsiteConfiguration'
+get_app_page_configuration = 'api/Auth/AppConfigure/getAppPageConfig'
+
+
 dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
 qa_admin_url = 'https://cfs-admin-qa.tgstechnology.net/api/Admin/'
 
@@ -42,8 +56,8 @@ dev_login_committee_payload = {
 }
 
 dev_login_admin_payload = {
-    "userName": DEV_COMMITTEE_USERNAME,
-    "password": DEV_COMMITTEE_PASSWORD
+    "userName": DEV_ADMIN_USERNAME,
+    "password": DEV_ADMIN_PASSWORD
 }
 
 # transactions
@@ -861,3 +875,56 @@ get_all_committee_transactions_payload = json.dumps({
   "isCommitteeSearch": False,
   "orgSubTypeCode": ""
 })
+
+# Auth's payload
+
+post_get_administrative_data_list_payload = json.dumps({
+  "pageNumber": "",
+  "searchKeyword": "",
+  "pageSize": "",
+  "sortColumn": "",
+  "sortDirection": "",
+  "orgId": ""
+})
+
+post_add_administrative_notes_payload = json.dumps({
+    "adminNotesCategoryID": 3,
+    "adminNotes": "Please file the transactions.",
+    "orgId": 48
+})
+#
+# Payload for registering a user
+post_register_user_payload = {
+    "userName": "",
+    "email": "",
+    "contactNumber": "",
+    "firstName": "",
+    "middleName": "",
+    "lastName": "",
+    "isAdmin": True,
+    "userAccountStatus": True,
+    "isLocked": False
+}
+
+# Payload for saving security questions
+post_save_security_question_payload = {
+    "userName": "",
+    "questionAnswerInfo": [
+        {"qid": "1000", "answer": "1"},
+        {"qid": "1002", "answer": "1"},
+        {"qid": "1019", "answer": "1"}
+    ]
+}
+
+post_verify_user_question_answer_payload = {
+  "userName": "",
+  "qid": "1002",
+  "answer": "1"
+}
+
+
+post_forgot_username_payload = {
+  "firstName": "",
+  "lastName": "",
+  "email": ""
+}
