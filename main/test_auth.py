@@ -58,23 +58,27 @@ def test_get_admin_notes_category():
 def test_get_administrative_data_list():
     try:
         authorization_token = get_admin_token()
+        payload = post_get_administrative_data_list_payload.copy()
+        payload["pageNumber"] = 1
+        payload["pageSize"] = 10
+        payload["orgId"] = str(406)
 
-        response = requests.get(dev_auth_url + dev_administrative_data_list, headers={
+        response = requests.post(dev_auth_url + dev_administrative_data_list, headers={
             'Authorization': authorization_token,
             'Content-Type': 'application/json'
-        }, data={})
+        }, data=json.dumps(payload))
 
         response_data = response.json()
 
         logging.info(f"Response Status Code: {response.status_code}")
-        # logging.info(f"Response Body: {response.text}")
+        logging.info(f"Response Body: {response.text}")
 
         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
         assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
-        # assert response_data.get("message") == "Candida/te Registration created successfully.", \
-        #     f"Unexpected message: {response_data.get('message')}"
+        logging.info(f"Administrative Data Total Records:"
+                     f" {response_data.get("responseData", {}).get("totalRecords")}")
 
-        logging.info("Admin roles fetched successfully with correct response.")
+        logging.info("Administrative Data fetched successfully with correct response.")
 
     except Exception as e:
         logging.error(f"Error in test_get_administrative_data_list: {e}")
@@ -131,7 +135,7 @@ def test_website_configuration():
         raise e
 
 
-def test_app_page_configuration():
+def app_page_configuration():
     try:
         authorization_token = get_admin_token()
 
@@ -153,36 +157,6 @@ def test_app_page_configuration():
     except Exception as e:
         logging.error(f"Error in test_app_page_configuration: {e}")
         raise e
-
-
-# ============================================================
-def test_add_user_login_history():
-    try:
-        authorization_token = get_admin_token()
-
-        response = requests.get(dev_auth_url + dev_add_administrative_notes, headers={
-            'Authorization': authorization_token,
-            'Content-Type': 'application/json'
-        }, data=post_add_administrative_notes_payload)
-
-        response_data = response.json()
-
-        logging.info(f"Response Status Code: {response.status_code}")
-        # logging.info(f"Response Body: {response.text}")
-
-        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
-        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
-        # assert response_data.get("message") == "Candida/te Registration created successfully.", \
-        #     f"Unexpected message: {response_data.get('message')}"
-
-        logging.info("Admin roles fetched successfully with correct response.")
-
-    except Exception as e:
-        logging.error(f"Error in test_add_administrative_notes: {e}")
-        raise e
-
-
-# ============================================================
 
 
 # Register, Login, Forgot Password
@@ -226,13 +200,11 @@ def test_register_forgot_username():
 
         logging.info(f"Update Contribution -  Status Code: {forgot_user_name_response.status_code}")
 
-        assert forgot_user_name_response.status_code == 200, (f"Unexpected status code:"
-                                                              f" {forgot_user_name_response.status_code}")
+        assert forgot_user_name_response.status_code == 200, f"Unexpected status code: {forgot_user_name_response.status_code}"
         assert forgot_user_name_response_data.get(
             "isSuccess") is True, "isSuccess is not True in forgot username response"
         assert (forgot_user_name_response_data.get("message") ==
-                "If the email address you entered is registered in this system, you will receive an email with your "
-                "username shortly."), \
+                "If the email address you entered is registered in this system, you will receive an email with your username shortly."), \
             f"Unexpected message in forgot username: {forgot_user_name_response_data.get('message')}"
 
         logging.info("Forgot username response appears successfully with 200 Status code.")
@@ -306,7 +278,7 @@ def test_save_and_verify_security_questions_and_answers():
         logging.info("Security questions saved successfully.")
     except Exception as e:
         logging.error(f"Error in test_save_and_verify_security_questions_and_answers: {e}")
-        raise
+        raise e
 
 
 def test_get_all_security_questions():
@@ -328,4 +300,169 @@ def test_get_all_security_questions():
 
     except Exception as e:
         logging.error(f"Error in test_get_all_security_questions: {e}")
+        raise e
+
+
+# Committee User Profile
+def test_get_pending_committee_access_requests_and_update_committee_access_status():
+    try:
+        authorization_token = get_committee_token()
+        payload = get_pending_committee_access_requests_payload.copy()
+        payload["pageNumber"] = 1
+        payload["pageSize"] = 10
+
+        response = requests.post(dev_auth_url + get_pending_committee_access_requests,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        response_data = response.json()
+        logging.info(response_data)
+
+        logging.info(f"Get Pending Committee Access Requests Status Code: {response.status_code}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, f"isSuccess is not True"
+        logging.info(f"Pending Committee Access Requests Total Records:"
+                     f" {response_data.get("responseData", {}).get("totalRecords")}")
+        logging.info("Pending Committee Access Requests response appears successfully with 200 Status code.")
+
+        # Access first id in responseData → data
+        data_list = response_data.get("responseData", {}).get("data", [])
+        first_id = data_list[0].get("id")
+        logging.info(f"First ID: {first_id}")
+
+        #  Update Committee Access Status
+        logging.info('-------- Update Committee Access Status --------')
+        payload_update_access_status = update_committee_access_status_payload.copy()
+        payload_update_access_status["id"] = int(first_id)
+        payload_update_access_status["accessStatus"] = "Approve"
+
+        response_for_update_access_status = requests.post(dev_auth_url + update_committee_access_status,
+                                                          headers={'Authorization': authorization_token,
+                                                                   'Content-Type': 'application/json'},
+                                                          data=json.dumps(payload_update_access_status))
+        update_access_status_response_data = response_for_update_access_status.json()
+        logging.info(update_access_status_response_data)
+
+        logging.info(f"Update Committee Access Status [Status Code: {response_for_update_access_status.status_code}]")
+
+        assert response_for_update_access_status.status_code == 200, \
+            f"Unexpected status code: {response_for_update_access_status.status_code}"
+        assert update_access_status_response_data.get("isSuccess") is True, f"isSuccess is not True"
+        assert update_access_status_response_data.get("message") == "User access status updated successfully.", \
+            f"Unexpected message: {update_access_status_response_data.get('message')}"
+
+        logging.info("User access status updated successfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_get_pending_committee_access_requests_and_update_committee_access_status: {e}")
+        raise e
+
+
+# Committee Users
+def test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data_list():
+    try:
+        authorization_token = get_committee_token()
+
+        payload = get_my_committee_users_data_list_payload.copy()
+        payload["pageNumber"] = 1
+        payload["pageSize"] = 10
+        payload["orgId"] = 1
+        response_get_user_list = requests.post(dev_auth_url + get_my_committee_users_data_list,
+                                               headers={'Authorization': authorization_token,
+                                                        'Content-Type': 'application/json'},
+                                               data=json.dumps(payload))
+        response_data_get = response_get_user_list.json()
+        logging.info(response_data_get)
+
+        logging.info(f"Get My Committee User Data List  Status Code: {response_get_user_list.status_code}")
+
+        assert response_get_user_list.status_code == 200, f"Unexpected status code: {response_get_user_list.status_code}"
+        assert response_data_get.get("isSuccess") is True, f"isSuccess is not True"
+        logging.info(f"Committee User Data List Total Records:"
+                     f" {response_data_get.get("responseData", {}).get("totalRecords")}")
+        logging.info("Pending Committee Access Requests response appears successfully with 200 Status code.")
+
+        #   Get My Committee Invite Users Data List
+        logging.info('------ Get My Committee Invite Users Data List ------ ')
+        payload = get_my_committee_invite_user_data_list_payload.copy()
+        payload["pageNumber"] = 1
+        payload["pageSize"] = 10
+
+        response_get_invite_user_list = requests.post(dev_auth_url + get_my_committee_invite_users_data_list,
+                                                      headers={'Authorization': authorization_token,
+                                                               'Content-Type': 'application/json'},
+                                                      data=json.dumps(payload))
+        response_invite_user_data = response_get_invite_user_list.json()
+        logging.info(response_invite_user_data)
+
+        logging.info(f"Committee Invite Users Data List  Status Code: {response_get_invite_user_list.status_code}")
+
+        assert response_get_invite_user_list.status_code == 200, (f"Unexpected status code: "
+                                                                  f"{response_get_invite_user_list.status_code}")
+        assert response_invite_user_data.get("isSuccess") is True, f"isSuccess is not True"
+        logging.info(f"Committee Invite Users Data List Total Records:"
+                     f" {response_invite_user_data.get("responseData", {}).get("totalRecords")}")
+        logging.info("Committee Invite Users Data List response appears successfully with 200 Status code.")
+
+    except Exception as e:
+        logging.error(f"Error in test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data_list: {e}")
+        raise e
+
+
+# User Access
+def test_get_user_registration_count():
+    try:
+        authorization_token = get_committee_token()
+
+        response = requests.get(dev_auth_url + get_user_registration_count, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data={})
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total approve count:"
+                     f" {response_data.get("responseData", {}).get("approveCount")}")
+        logging.info(f"Total pending count:"
+                     f" {response_data.get("responseData", {}).get("pendingCount")}")
+
+        logging.info("User registration count fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(f"Error in test_get_user_registration_count: {e}")
+        raise e
+
+
+# My Profile Messages
+def test_get_my_profile_notifications():
+    try:
+        authorization_token = get_committee_token()
+
+        response = requests.get(dev_auth_url + get_my_profile_notifications, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data={})
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        for notification in response_data.get("responseData", []):
+            logging.info(f"Title: {notification.get('title')}")
+            logging.info(f"Description: {notification.get('description')}")
+            logging.info(f"Post Date: {notification.get('postDate')}")
+
+        logging.info("Profile Notification fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(f"Error in test_get_my_profile_notifications: {e}")
         raise e

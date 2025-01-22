@@ -129,6 +129,7 @@ def test_post_iec_individual_registration():
             'Content-Type': 'application/json'
         }, data=post_IEC_individual_registration_payload)
 
+
         response_data = response.json()
 
         logging.info(f"Response Status Code: {response.status_code}")
@@ -180,25 +181,26 @@ def test_post_iec_organization_registration():
         raise e
 
 
-# def test_get_all_committee_registrations():
-#     try:
-#         authorization_token = get_committee_token()
-#
-#         response = requests.post(dev_committee_url+get_all_committee_registrations, headers={
-#             'Authorization': authorization_token,
-#             'Content-Type': 'application/json'
-#         }, data=get_all_transactions_payload)
-#
-#         response_data = response.json()
-#
-#         logging.info(f"Response Status Code: {response.status_code}")
-#
-#         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
-#         assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
-#         total_records = response_data.get("responseData", {}).get("totalRecords")
-#         logging.info(f"Total Records: {total_records}")
-#         logging.info("Total records fetched successfully .")
-#
-#     except Exception as e:
-#         logging.error(f"Error in get_all_committee_transactions_payload: {e}")
-#         raise e
+def test_get_all_committee_registrations():
+    try:
+        authorization_token = get_committee_token()
+
+        response = requests.post(dev_committee_url+get_all_committee_registrations, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=get_all_transactions_payload)
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        total_records = response_data.get("responseData", {}).get("totalRecords")
+        logging.info(f"Total Records: {total_records}")
+        logging.info("Total records fetched successfully .")
+
+    except Exception as e:
+        logging.error(f"Error in get_all_committee_transactions_payload: {e}")
+        raise e
+
