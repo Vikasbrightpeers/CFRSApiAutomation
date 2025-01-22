@@ -129,7 +129,6 @@ def test_post_iec_individual_registration():
             'Content-Type': 'application/json'
         }, data=post_IEC_individual_registration_payload)
 
-
         response_data = response.json()
 
         logging.info(f"Response Status Code: {response.status_code}")
@@ -203,4 +202,3 @@ def test_post_iec_organization_registration():
 #     except Exception as e:
 #         logging.error(f"Error in get_all_committee_transactions_payload: {e}")
 #         raise e
-

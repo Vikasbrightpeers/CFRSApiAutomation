@@ -1,3 +1,5 @@
+import json
+
 # ----------------------url's and endpoints-------------------------------------------
 
 dev_auth_url = 'https://cfs-auth-dev.tgstechnology.net/'
@@ -48,7 +50,6 @@ DEV_COMMITTEE_USERNAME = "TGSOrg"
 DEV_COMMITTEE_PASSWORD = "Tgs@123"
 
 # ---------- payloads -------
-import json
 
 dev_login_committee_payload = {
     "userName": DEV_COMMITTEE_USERNAME,
@@ -876,7 +877,7 @@ get_all_committee_transactions_payload = json.dumps({
   "orgSubTypeCode": ""
 })
 
-# Auth's payload
+# Auth payload
 
 post_get_administrative_data_list_payload = json.dumps({
   "pageNumber": "",

@@ -3,7 +3,8 @@ import string
 
 
 def generate_first_name():
-    first_name = ''.join(random.choices(string.ascii_uppercase, k=1)) + ''.join(random.choices(string.ascii_lowercase, k=5))
+    first_name = (''.join(random.choices(string.ascii_uppercase, k=1)) +
+                  ''.join(random.choices(string.ascii_lowercase, k=5)))
     return first_name
 
 
@@ -13,20 +14,24 @@ def generate_middle_name():
 
 
 def generate_last_name():
-    last_name = ''.join(random.choices(string.ascii_uppercase, k=1)) + ''.join(random.choices(string.ascii_lowercase, k=5))
+    last_name = (''.join(random.choices(string.ascii_uppercase, k=1)) +
+                 ''.join(random.choices(string.ascii_lowercase, k=5)))
     return last_name
 
 
 def generate_random_name():
-    first_name = ''.join(random.choices(string.ascii_uppercase, k=1)) + ''.join(random.choices(string.ascii_lowercase, k=5))
-    last_name = ''.join(random.choices(string.ascii_uppercase, k=1)) + ''.join(random.choices(string.ascii_lowercase, k=5))
+    first_name = (''.join(random.choices(string.ascii_uppercase, k=1)) +
+                  ''.join(random.choices(string.ascii_lowercase, k=5)))
+    last_name = (''.join(random.choices(string.ascii_uppercase, k=1)) +
+                 ''.join(random.choices(string.ascii_lowercase, k=5)))
     middle_name = ''.join(random.choices(string.ascii_uppercase, k=1))
     return f"{first_name} {last_name} {middle_name} "
 
 
 def generate_random_organization_name():
     name_length = random.randint(5, 7)
-    organization_name = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + " ", k=name_length)).strip()
+    organization_name = ''.join(random.choices(string.ascii_uppercase +
+                                               string.ascii_lowercase + " ", k=name_length)).strip()
     return organization_name + " Pvt Ltd"
 
 
@@ -44,7 +49,7 @@ def generate_random_mobile_number():
 def generate_random_email():
     username_length = random.randint(6, 8)  # Username length between 6 and 12 characters
     username = ''.join(random.choices(string.ascii_letters + string.digits, k=username_length))
-    domain = "yoyomail.com"
+    domain = "ymail.com"
     email = f"{username}@{domain}"
     return email
 

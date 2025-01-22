@@ -1,0 +1,1270 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="23" time="43.704" timestamp="2025-01-09T11:35:49.618869" hostname="VikasPatel"><testcase classname="main.test_demo" name="test_CFRS_156_Notification_001" time="1.127"><failure message="requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+&gt;           return complexjson.loads(self.text, **kwargs)
+
+.venv\Lib\site-packages\requests\models.py:974: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000017FD492AA80&gt;, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+    def test_CFRS_156_Notification_001():
+        try:
+            request_headers = {
+                'Authorization': authorizationToken
+            }
+            response = requests.request("GET", notificationUrl+'getAllNotificationType', headers=request_headers, data={})
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            logging.info("Notification Type Fetched succesfully")
+    
+        except Exception as e:
+            logging.error(e)
+&gt;           raise e
+
+main\test_demo.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main\test_demo.py:88: in test_CFRS_156_Notification_001
+    data = response.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+&gt;           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+.venv\Lib\site-packages\requests\models.py:978: JSONDecodeError</failure></testcase><testcase classname="main.test_demo" name="test_CFRS_156_Notification_002" time="0.962"><failure message="requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+&gt;           return complexjson.loads(self.text, **kwargs)
+
+.venv\Lib\site-packages\requests\models.py:974: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000017FD492AA80&gt;, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+    def test_CFRS_156_Notification_002():
+        try:
+            request_headers = {
+                'Authorization': authorizationToken
+            }
+            response = requests.request("GET", notificationUrl+'gettAllNotificationViewStatus',
+                                        headers=request_headers, data={})
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            logging.info("Notification Status Fetched succesfully")
+    
+        except Exception as e:
+            logging.error(e)
+&gt;           raise e
+
+main\test_demo.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main\test_demo.py:105: in test_CFRS_156_Notification_002
+    data = response.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+&gt;           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+.venv\Lib\site-packages\requests\models.py:978: JSONDecodeError</failure></testcase><testcase classname="main.test_demo" name="test_CFRS_156_Notification_003" time="1.002"><failure message="requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+&gt;           return complexjson.loads(self.text, **kwargs)
+
+.venv\Lib\site-packages\requests\models.py:974: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000017FD492AA80&gt;, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+    def test_CFRS_156_Notification_003():
+        try:
+            payload = json.dumps({
+                "pageNumber": 1,
+                "searchKeyword": "",
+                "pageSize": 1,
+                "sortColumn": "",
+                "sortDirection": "",
+                "notificationType": "",
+                "notificationName": "",
+                "postDate": "",
+                "viewMode": "",
+                "notificationStatus": "active"
+            })
+            request_headers = {
+                'Content-Type': 'application / json',
+                'Authorization': authorizationToken
+            }
+            response = requests.request("POST", notificationUrl+'getAllAdminNotifications',
+                                        headers=request_headers, data=payload)
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            logging.info("All Notification Fetched succesfully")
+    
+        except Exception as e:
+            logging.error(e)
+&gt;           raise e
+
+main\test_demo.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main\test_demo.py:135: in test_CFRS_156_Notification_003
+    data = response.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+&gt;           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+.venv\Lib\site-packages\requests\models.py:978: JSONDecodeError</failure></testcase><testcase classname="main.test_demo" name="test_CFRS_156_Notification_004_005" time="0.975"><failure message="requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+&gt;           return complexjson.loads(self.text, **kwargs)
+
+.venv\Lib\site-packages\requests\models.py:974: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x0000017FD492AA80&gt;, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+    def test_CFRS_156_Notification_004_005():
+        try:
+            payload = json.dumps({
+                "id": 0,
+                "title": "Hello ",
+                "adminNotification": "this is description",
+                "viewStatus": "abcd",
+                "adminNotificationType": "abcd",
+                "postDate": "2024-10-10",
+                "viewMode": "abcd"
+            })
+            request_headers = {
+                'Content-Type': 'application / json',
+                'Authorization': authorizationToken
+            }
+            response = requests.request("POST", notificationUrl+'addEditNotification',
+                                        headers=request_headers, data=payload)
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            notification_id = data['responseData']['id']
+            logging.info(notification_id)
+            logging.info("Notification added succesfully")
+        #     ------ update -----
+            payload = json.dumps({
+                "id": notification_id,
+                "title": "Hello parth",
+                "adminNotification": "this description",
+                "viewStatus": "abcd",
+                "adminNotificationType": "abcd",
+                "postDate": "2024-10-10",
+                "viewMode": "abcd"
+            })
+            response = requests.request("POST", notificationUrl + 'addEditNotification',
+                                        headers=request_headers, data=payload)
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            logging.info("Notification edited succesfully")
+        #     -------- delete -------
+            response = requests.request("DELETE", notificationUrl + 'deleteNotification/' + str(notification_id),
+                                        headers=request_headers, data={})
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200
+            logging.info("Notification deleted succesfully")
+    
+        except Exception as e:
+            logging.error(e)
+&gt;           raise e
+
+main\test_demo.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main\test_demo.py:162: in test_CFRS_156_Notification_004_005
+    data = response.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Response [404]&gt;, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) &gt; 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+    
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+&gt;           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+.venv\Lib\site-packages\requests\models.py:978: JSONDecodeError</failure></testcase><testcase classname="main.test_demo" name="test_candidate_registration" time="0.002" /><testcase classname="main.test_demo" name="test_add_worker" time="2.116"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_worker():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_worker_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Payment to Worker added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            logging.info("Payment to Worker added successfully with correct response.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_worker: {e}")
+&gt;           raise e
+
+main\test_demo.py:247: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_worker():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_worker_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_demo.py:238: AssertionError</failure></testcase><testcase classname="main.test_demo" name="test_add_loan" time="2.039"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_loan():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_loan_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Loan added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            transaction_id = response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Transaction ID: {transaction_id}")
+    
+            logging.info("Loan added successfully with correct response.")
+    
+            #     -update-
+            update_loan_payload = json.dumps({
+                "transactionID": transaction_id,
+                "orgId": 24,
+                "orgVersID": 1,
+                "orgRegistrationID": 0,
+                "entityTypeCode": "SE",
+                "transactionAmount": 100,
+                "transactionDate": "2024-12-01T13:00:00.000Z",
+                "contributorPayeeID": 179,
+                "contributorPayeeVersionID": 1,
+                "transactionTypeCode": "LOAN"
+            })
+            response = requests.post(dev_committee_url + update_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=update_loan_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Loan updated successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            #     -delete-
+            response = requests.post(dev_committee_url+delete_transactions+str(transaction_id), headers={}, data={})
+    
+            response_data = response.json()
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Loan deleted successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_loan: {e}")
+&gt;           raise e
+
+main\test_demo.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_loan():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_loan_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_demo.py:264: AssertionError</failure></testcase><testcase classname="main.test_demo" name="test_add_debt" time="1.988"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_debt():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_debt_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Debt added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            logging.info("Debt added successfully with correct response.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_debt: {e}")
+&gt;           raise e
+
+main\test_demo.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_debt():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_debt_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_demo.py:333: AssertionError</failure></testcase><testcase classname="main.test_demo" name="test_get_all_transactions" time="2.071" /><testcase classname="main.test_demo" name="test_post_ecc_individual_registration" time="2.000" /><testcase classname="main.test_demo" name="test_post_ecc_organization_registration" time="2.054" /><testcase classname="main.test_registrations" name="test_post_candidate_registration" time="2.051" /><testcase classname="main.test_registrations" name="test_post_pre_candidate_registration" time="2.404" /><testcase classname="main.test_registrations" name="test_post_pac_registration" time="2.066" /><testcase classname="main.test_registrations" name="test_post_ppc_ccc_registration" time="2.027" /><testcase classname="main.test_registrations" name="test_post_iec_individual_registration" time="2.035" /><testcase classname="main.test_registrations" name="test_post_iec_organization_registration" time="2.016" /><testcase classname="main.test_transactions" name="test_add_update_return_delete_contribution" time="2.004"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_update_return_delete_contribution():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_Contribution_payload)
+            logging.info(response)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            # logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Contribution added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            logging.info("Transaction added successfully with correct response.")
+    
+            add_transaction_id = response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Add Transaction ID: {add_transaction_id}")
+    
+        #     -update-
+            logging.info("...............Update Contribution..................")
+            update_payload = json.loads(update_Contribution_payload)
+            update_payload["transactionId"] = add_transaction_id
+            update_payload = json.dumps(update_payload)
+    
+            update_response = requests.post(dev_committee_url + update_transactions, headers={
+                    'Authorization': authorization_token,
+                    'Content-Type': 'application/json'
+                }, data=update_payload)
+    
+            update_response_data = update_response.json()
+            logging.info(f"Update Contribution -  Status Code: {update_response.status_code}")
+            # logging.info(f"Update Contribution - Response Body: {update_response.text}")
+    
+            assert update_response.status_code == 200, f"Unexpected status code: {update_response.status_code}"
+            assert update_response_data.get("isSuccess") is True, "isSuccess is not True in Update Contribution response"
+            assert update_response_data.get("message") == "Contribution updated successfully.", \
+                f"Unexpected message in Update Contribution: {update_response_data.get('message')}"
+    
+            logging.info("Contribution updated successfully.")
+    
+            # update_transaction_id = update_response_data.get("responseData", {}).get("transactionID")
+            # logging.info(f"Transaction ID: {update_transaction_id}")
+    
+        #    --return--
+            logging.info("...............Return Contribution...............")
+            return_payload = json.loads(return_Contribution_payload)
+            return_payload["transactionId"] = add_transaction_id
+            return_payload = json.dumps(return_payload)
+    
+            return_response = requests.post(dev_committee_url + return_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=return_payload)
+    
+            return_response_data = return_response.json()
+            logging.info(f"Return Contribution -  Status Code: {return_response.status_code}")
+            # logging.info(f"Update Contribution - Response Body: {return_response.text}")
+    
+            assert return_response.status_code == 200, f"Unexpected status code: {return_response.status_code}"
+            assert return_response_data.get("isSuccess") is True, "isSuccess is not True in Update Contribution response"
+            assert return_response_data.get("message") == "Return contribution added successfully.", \
+                f"Unexpected message in return Contribution: {return_response_data.get('message')}"
+    
+            logging.info("Return updated successfully.")
+    
+            return_transaction_id = return_response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Return Transaction ID: {return_transaction_id}")
+    
+        #    --delete added--
+            logging.info("............Delete added Contribution............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(add_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Contribution -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Contribution deleted successfully.", \
+                f"Unexpected message in delete Contribution: {delete_response_data.get('message')}"
+            logging.info("Added Contribution deleted successfully.")
+    
+        #    --delete return--
+            logging.info("............Delete return Contribution...............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(return_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Return Delete Contribution -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Contribution deleted successfully.", \
+                f"Unexpected message in delete Contribution: {delete_response_data.get('message')}"
+            logging.info("Return Contribution deleted successfully.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_update_return_delete_contribution: {e}")
+&gt;           raise e
+
+main\test_transactions.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_update_return_delete_contribution():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_Contribution_payload)
+            logging.info(response)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            # logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_transactions.py:20: AssertionError</failure></testcase><testcase classname="main.test_transactions" name="test_add_update_return_delete_expenditure" time="2.025"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_update_return_delete_expenditure():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_expenditure_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Expenditure added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+            add_transaction_id = response_data.get("responseData", {}).get("transactionID")
+    
+            logging.info(f"Add Transaction ID: {add_transaction_id}")
+            logging.info("Expenditure added successfully with correct response.")
+    
+        #     -update-
+            logging.info("...............Update Expenditure..................")
+            update_payload = json.loads(update_expenditure_payload)
+            update_payload["transactionId"] = add_transaction_id
+            update_payload = json.dumps(update_payload)
+    
+            update_response = requests.post(dev_committee_url + update_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=update_payload)
+    
+            update_response_data = update_response.json()
+            logging.info(f"Update Expenditure -  Status Code: {update_response.status_code}")
+            # logging.info(f"Update Expenditure - Response Body: {update_response.text}")
+    
+            assert update_response.status_code == 200, f"Unexpected status code: {update_response.status_code}"
+            assert update_response_data.get("isSuccess") is True, "isSuccess is not True in Update Expenditure response"
+            assert update_response_data.get("message") == "Expenditure updated successfully.", \
+                f"Unexpected message in Update Expenditure: {update_response_data.get('message')}"
+    
+            logging.info("Expenditure updated successfully.")
+    
+    #    --return--
+            logging.info("...............Return Expenditure...............")
+            return_payload = json.loads(return_expenditure_payload)
+            return_payload["transactionId"] = add_transaction_id
+            return_payload = json.dumps(return_payload)
+    
+            return_response = requests.post(dev_committee_url + return_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=return_payload)
+    
+            return_response_data = return_response.json()
+            logging.info(f"Return Expenditure -  Status Code: {return_response.status_code}")
+            # logging.info(f"Update Expenditure - Response Body: {return_response.text}")
+    
+            assert return_response.status_code == 200, f"Unexpected status code: {return_response.status_code}"
+            assert return_response_data.get("isSuccess") is True, "isSuccess is not True in Return Expenditure response"
+            assert return_response_data.get("message") == "Return expenditure added successfully.", \
+                f"Unexpected message in Update Expenditure: {return_response_data.get('message')}"
+    
+            logging.info("Return updated successfully.")
+    
+            return_transaction_id = return_response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Return Transaction ID: {return_transaction_id}")
+    
+        #    --delete added--
+            logging.info("............Delete added Expenditure............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(add_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Expenditure -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Expenditure deleted successfully.", \
+                f"Unexpected message in Update Expenditure: {delete_response_data.get('message')}"
+            logging.info("Added Expenditure deleted successfully.")
+    
+        #    --delete return--
+            logging.info("............Delete return Expenditure...............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(return_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Contribution -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Expenditure deleted successfully.", \
+                f"Unexpected message in Update Expenditure: {delete_response_data.get('message')}"
+            logging.info("Return Expenditure deleted successfully.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_expenditure: {e}")
+&gt;           raise e
+
+main\test_transactions.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_update_return_delete_expenditure():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_expenditure_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_transactions.py:121: AssertionError</failure></testcase><testcase classname="main.test_transactions" name="test_add_add_update_delete_worker" time="2.034"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_add_update_delete_worker():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_worker_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Payment to Worker added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            logging.info("Payment to Worker added successfully with correct response.")
+    
+            add_transaction_id = response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Add Transaction ID: {add_transaction_id}")
+    
+            #     -update-
+            logging.info("...............Update Payment to worker transaction..................")
+            update_payload = json.loads(update_worker_payload)
+            update_payload["transactionId"] = add_transaction_id
+            update_payload = json.dumps(update_payload)
+    
+            update_response = requests.post(dev_committee_url + update_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=update_payload)
+    
+            update_response_data = update_response.json()
+            logging.info(f"Update Contribution -  Status Code: {update_response.status_code}")
+            # logging.info(f"Update Contribution - Response Body: {update_response.text}")
+    
+            assert update_response.status_code == 200, f"Unexpected status code: {update_response.status_code}"
+            assert update_response_data.get("isSuccess") is True, ("isSuccess is not True in Update Payment to worker "
+                                                                   "response")
+            assert update_response_data.get("message") == "Payment to Worker updated successfully.", \
+                f"Unexpected message in Update Payment to worker: {update_response_data.get('message')}"
+    
+            logging.info("Payment to worker transaction updated successfully.")
+    
+            #    --delete return--
+            logging.info("............Delete Payment to worker transaction...............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(add_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Payment to worker transaction -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Payment to Worker deleted successfully.", \
+                f"Unexpected message in delete Payment: {delete_response_data.get('message')}"
+            logging.info("Payment to worker transaction deleted successfully.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_worker: {e}")
+&gt;           raise e
+
+main\test_transactions.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_add_update_delete_worker():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_worker_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_transactions.py:218: AssertionError</failure></testcase><testcase classname="main.test_transactions" name="test_add_update_payment_delete_loan" time="1.970"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_update_payment_delete_loan():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_loan_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Loan added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            transaction_id = response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Transaction ID: {transaction_id}")
+    
+            logging.info("Loan added successfully with correct response.")
+    
+            # -update -
+            logging.info("...............Update Loan..................")
+            update_payload = json.loads(update_loan_payload)
+            update_payload["transactionId"] = transaction_id
+            update_payload = json.dumps(update_payload)
+    
+            update_response = requests.post(dev_committee_url + update_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=update_payload)
+    
+            update_response_data = update_response.json()
+            logging.info(f"Update Loan -  Status Code: {update_response.status_code}")
+            # logging.info(f"Update Loan - Response Body: {update_response.text}")
+    
+            assert update_response.status_code == 200, f"Unexpected status code: {update_response.status_code}"
+            assert update_response_data.get("isSuccess") is True, "isSuccess is not True in Update Loan response"
+            assert update_response_data.get("message") == "Loan updated successfully.", \
+                f"Unexpected message in Update Loan: {update_response_data.get('message')}"
+    
+            logging.info("Loan updated successfully.")
+    
+            #  --payment--
+            logging.info("...............Payment Loan...............")
+            return_payload = json.loads(payment_to_loan_payload)
+            return_payload["transactionId"] = transaction_id
+            return_payload = json.dumps(return_payload)
+    
+            return_response = requests.post(dev_committee_url + return_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=return_payload)
+    
+            return_response_data = return_response.json()
+            logging.info(f"Loan payment -  Status Code: {return_response.status_code}")
+            # logging.info(f"Loan payment - Response Body: {return_response.text}")
+    
+            assert return_response.status_code == 200, f"Unexpected status code: {return_response.status_code}"
+            assert return_response_data.get("isSuccess") is True, "isSuccess is not True in Loan payment response"
+            assert return_response_data.get("message") == "Loan payment added successfully.", \
+                f"Unexpected message in Update Expenditure: {return_response_data.get('message')}"
+    
+            logging.info("Loan payment added successfully.")
+    
+            return_transaction_id = return_response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Loan payment Transaction ID: {return_transaction_id}")
+    
+            #    --delete added--
+            logging.info("............Delete added ............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Expenditure -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Loan deleted successfully.", \
+                f"Unexpected message in Loan delete: {delete_response_data.get('message')}"
+            logging.info("Added Loan deleted successfully.")
+    
+            #    --delete payment--
+            logging.info("............Delete payment Loan...............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(return_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Loan -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Loan deleted successfully.", \
+                f"Unexpected message in Loan payment delete: {delete_response_data.get('message')}"
+            logging.info("Loan payment deleted successfully.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_update_payment_delete_loan: {e}")
+&gt;           raise e
+
+main\test_transactions.py:362: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_update_payment_delete_loan():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_loan_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_transactions.py:281: AssertionError</failure></testcase><testcase classname="main.test_transactions" name="test_add_update_payment_delete_debt" time="2.157"><failure message="AssertionError: Unexpected status code: 400&#10;assert 400 == 200&#10; +  where 400 = &lt;Response [400]&gt;.status_code">def test_add_update_payment_delete_debt():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_debt_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+            assert response_data.get("message") == "Debt added successfully.", \
+                f"Unexpected message: {response_data.get('message')}"
+    
+            logging.info("Debt added successfully with correct response.")
+    
+            transaction_id = response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Transaction ID: {transaction_id}")
+    
+            logging.info("Loan added successfully with correct response.")
+    
+            # -update -
+            logging.info("...............Update Debt..................")
+            update_payload = json.loads(update_debt_payload)
+            update_payload["transactionId"] = transaction_id
+            update_payload = json.dumps(update_payload)
+    
+            update_response = requests.post(dev_committee_url + update_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=update_payload)
+    
+            update_response_data = update_response.json()
+            logging.info(f"Update Debt -  Status Code: {update_response.status_code}")
+            # logging.info(f"Update Debt - Response Body: {update_response.text}")
+    
+            assert update_response.status_code == 200, f"Unexpected status code: {update_response.status_code}"
+            assert update_response_data.get("isSuccess") is True, "isSuccess is not True in Update Debt response"
+            assert update_response_data.get("message") == "Debt updated successfully.", \
+                f"Unexpected message in Update Debt: {update_response_data.get('message')}"
+    
+            logging.info("Debt updated successfully.")
+    
+            #  --payment--
+            logging.info("...............Debt Payment...............")
+            return_payload = json.loads(debt_payment_payload)
+            return_payload["transactionId"] = transaction_id
+            return_payload = json.dumps(return_payload)
+    
+            return_response = requests.post(dev_committee_url + return_transactions, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=return_payload)
+    
+            return_response_data = return_response.json()
+            logging.info(f"Debt payment -  Status Code: {return_response.status_code}")
+            # logging.info(f"Debt payment - Response Body: {return_response.text}")
+    
+            assert return_response.status_code == 200, f"Unexpected status code: {return_response.status_code}"
+            assert return_response_data.get("isSuccess") is True, "isSuccess is not True in Debt payment response"
+            assert return_response_data.get("message") == "Debt payment added successfully.", \
+                f"Unexpected message in Debt payment: {return_response_data.get('message')}"
+    
+            logging.info("Loan payment added successfully.")
+    
+            return_transaction_id = return_response_data.get("responseData", {}).get("transactionID")
+            logging.info(f"Debt payment Transaction ID: {return_transaction_id}")
+    
+            #    --delete added--
+            logging.info("............Delete added ............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Expenditure -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Debt deleted successfully.", \
+                f"Unexpected message in Debt delete: {delete_response_data.get('message')}"
+            logging.info("Added Debt deleted successfully.")
+    
+            #    --delete payment--
+            logging.info("............Delete Debt Payment...............")
+            delete_response = requests.post(dev_committee_url + delete_transactions + str(return_transaction_id),
+                                            headers={'Authorization': authorization_token}, data={})
+            delete_response_data = delete_response.json()
+            logging.info(f"Delete Debt -  Status Code: {delete_response.status_code}")
+            assert delete_response.status_code == 200, f"Unexpected status code: {delete_response.status_code}"
+            assert delete_response_data.get("message") == "Debt deleted successfully.", \
+                f"Unexpected message in Debt payment delete: {delete_response_data.get('message')}"
+            logging.info("Debt payment deleted successfully.")
+    
+        except Exception as e:
+            logging.error(f"Error in test_add_update_payment_delete_debt: {e}")
+&gt;           raise e
+
+main\test_transactions.py:462: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def test_add_update_payment_delete_debt():
+        try:
+            authorization_token = get_committee_token()
+    
+            response = requests.post(dev_committee_url + transactionUrl, headers={
+                'Authorization': authorization_token,
+                'Content-Type': 'application/json'
+            }, data=add_debt_payload)
+    
+            response_data = response.json()
+    
+            logging.info(f"Response Status Code: {response.status_code}")
+            logging.info(f"Response Body: {response.text}")
+    
+&gt;           assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+E           AssertionError: Unexpected status code: 400
+E           assert 400 == 200
+E            +  where 400 = &lt;Response [400]&gt;.status_code
+
+main\test_transactions.py:379: AssertionError</failure></testcase><testcase classname="main.test_transactions" name="test_get_all_transactions" time="2.097" /></testsuite></testsuites>

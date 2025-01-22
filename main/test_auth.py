@@ -1,8 +1,3 @@
-import time
-import requests
-from randomfunctions import *
-from constant import *
-
 from utils import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -140,7 +135,7 @@ def test_app_page_configuration():
     try:
         authorization_token = get_admin_token()
 
-        response = requests.get(dev_auth_url + get_app_page_configuration + ""+"", headers={
+        response = requests.get(dev_auth_url + get_app_page_configuration + "" + "", headers={
             'Authorization': authorization_token,
             'Content-Type': 'application/json'
         }, data={})
@@ -185,6 +180,8 @@ def test_add_user_login_history():
     except Exception as e:
         logging.error(f"Error in test_add_administrative_notes: {e}")
         raise e
+
+
 # ============================================================
 
 
@@ -203,7 +200,7 @@ def test_register_forgot_username():
         logging.info("User added successfully.")
         authorization_token = user_data.get('token')
 
-    #   Forgot username
+        #   Forgot username
         logging.info("------- Forgot Username -------")
         first_name = response_data.get("firstName")
         logging.info(f"Username: {first_name}")
@@ -220,18 +217,22 @@ def test_register_forgot_username():
         payload["email"] = email_id
 
         forgot_user_name_response = requests.post(dev_auth_url + forgot_username,
-            headers ={'Authorization': authorization_token, "Content-Type": "application/json"},
-                data=json.dumps(payload))
+                                                  headers={'Authorization': authorization_token,
+                                                           "Content-Type": "application/json"},
+                                                  data=json.dumps(payload))
 
         forgot_user_name_response_data = forgot_user_name_response.json()
         logging.info(forgot_user_name_response_data)
 
         logging.info(f"Update Contribution -  Status Code: {forgot_user_name_response.status_code}")
 
-        assert forgot_user_name_response.status_code == 200, f"Unexpected status code: {forgot_user_name_response.status_code}"
-        assert forgot_user_name_response_data.get("isSuccess") is True, "isSuccess is not True in forgot username response"
+        assert forgot_user_name_response.status_code == 200, (f"Unexpected status code:"
+                                                              f" {forgot_user_name_response.status_code}")
+        assert forgot_user_name_response_data.get(
+            "isSuccess") is True, "isSuccess is not True in forgot username response"
         assert (forgot_user_name_response_data.get("message") ==
-                "If the email address you entered is registered in this system, you will receive an email with your username shortly."), \
+                "If the email address you entered is registered in this system, you will receive an email with your "
+                "username shortly."), \
             f"Unexpected message in forgot username: {forgot_user_name_response_data.get('message')}"
 
         logging.info("Forgot username response appears successfully with 200 Status code.")
@@ -284,7 +285,7 @@ def test_save_and_verify_security_questions_and_answers():
 
         logging.info("Security questions saved successfully.")
 
-    #     Verify User Question And Answer
+        #     Verify User Question And Answer
 
         verify_security_qa_payload = post_verify_user_question_answer_payload.copy()
         verify_security_qa_payload["userName"] = user_name
@@ -305,7 +306,7 @@ def test_save_and_verify_security_questions_and_answers():
         logging.info("Security questions saved successfully.")
     except Exception as e:
         logging.error(f"Error in test_save_and_verify_security_questions_and_answers: {e}")
-        raise e
+        raise
 
 
 def test_get_all_security_questions():
@@ -328,4 +329,3 @@ def test_get_all_security_questions():
     except Exception as e:
         logging.error(f"Error in test_get_all_security_questions: {e}")
         raise e
-
