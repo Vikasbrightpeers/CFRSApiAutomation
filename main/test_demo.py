@@ -78,8 +78,6 @@ authorizationToken = get_committee_token()
 
 # ---------------------------------------------------------------------------------------------------------------------
 
-
-
 def test_candidate_registration():
     global driver, wait
     try:

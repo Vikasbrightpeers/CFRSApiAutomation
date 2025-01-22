@@ -1,7 +1,8 @@
 import requests
 import logging
 from constant import *
-from randomfunctions import*
+from randomfunctions import *
+from endpoints import *
 
 
 def get_committee_token():

@@ -1,41 +1,4 @@
-# ----------------------url's and endpoints-------------------------------------------
-
-dev_auth_url = 'https://cfs-auth-dev.tgstechnology.net/'
-dev_login_url = 'api/Auth/login'
-
-
-dev_my_admin_role_list = 'api/Auth/AdminDashboard/getMyAdminRoleList'
-dev_admin_notes_category = 'api/Auth/AdministrativeNotes/getAllAdminNotesCategory'
-dev_administrative_data_list = 'api/Auth/AdministrativeNotes/getAdministrativeNoteDataList'
-dev_add_administrative_notes = 'api/Auth/AdministrativeNotes/addAdministrativeNote'
-save_security_question_info = 'api/Auth/saveSecurityQuestionInfo'
-add_and_update_user = 'api/Auth/ManageUsers/addAndUpdateUser'
-get_all_security_questions = 'api/Auth/getAllSecurityQuestions'
-verify_user_question_and_answer = 'api/Auth/verifyUserQuestionAndAnswer'
-forgot_username = 'api/Auth/forgotUsername'
-get_website_configuration = 'api/Auth/AppConfigure/getWebsiteConfiguration'
-get_app_page_configuration = 'api/Auth/AppConfigure/getAppPageConfig'
-
-
-dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
-qa_admin_url = 'https://cfs-admin-qa.tgstechnology.net/api/Admin/'
-
-dev_committee_url = 'https://cfs-committee-dev.tgstechnology.net/api/Committee/'
-qa_committee_url = 'https://cfs-committee-qa.tgstechnology.net/api/Committee/'
-
-# transaction
-transactionUrl = "CommitteeTransactions/addTransaction"
-get_all_transactions = "CommitteeTransactions/getAllTransactionDataList"
-update_transactions = 'CommitteeTransactions/updateTransaction'
-delete_transactions = 'CommitteeTransactions/deleteTransactionById/'
-return_transactions = 'CommitteeTransactions/addRetunTransaction'
-
-# registration
-post_registration = 'CommitteeRegistration/submitCommitteeRegistrationData'
-get_all_committee_registrations = 'CommitteeRegistration/getAllCommitteeRegistrationDataList'
-
-# Notification
-notificationUrl = dev_admin_url + '/Notification/'
+import json
 
 # ---------- usernames & passwords -------
 DEV_ADMIN_USERNAME = "ETHAdmin"
@@ -45,10 +8,9 @@ QA_ADMIN_USERNAME = "ETHAdmin"
 QA_ADMIN_PASSWORD = "Tgs@1234"
 
 DEV_COMMITTEE_USERNAME = "TGSOrg"
-DEV_COMMITTEE_PASSWORD = "Tgs@123"
+DEV_COMMITTEE_PASSWORD = "Tgs@12345"
 
 # ---------- payloads -------
-import json
 
 dev_login_committee_payload = {
     "userName": DEV_COMMITTEE_USERNAME,
@@ -58,6 +20,11 @@ dev_login_committee_payload = {
 dev_login_admin_payload = {
     "userName": DEV_ADMIN_USERNAME,
     "password": DEV_ADMIN_PASSWORD
+}
+
+test_login_committee_payload = {
+    "userName": "vpatel",
+    "password": "Vikas@123"
 }
 
 # transactions
@@ -876,23 +843,23 @@ get_all_committee_transactions_payload = json.dumps({
   "orgSubTypeCode": ""
 })
 
-# Auth's payload
+# Auth
 
-post_get_administrative_data_list_payload = json.dumps({
+post_get_administrative_data_list_payload = {
   "pageNumber": "",
   "searchKeyword": "",
   "pageSize": "",
   "sortColumn": "",
   "sortDirection": "",
   "orgId": ""
-})
+}
 
 post_add_administrative_notes_payload = json.dumps({
     "adminNotesCategoryID": 3,
     "adminNotes": "Please file the transactions.",
     "orgId": 48
 })
-#
+
 # Payload for registering a user
 post_register_user_payload = {
     "userName": "",
@@ -922,9 +889,49 @@ post_verify_user_question_answer_payload = {
   "answer": "1"
 }
 
-
 post_forgot_username_payload = {
   "firstName": "",
   "lastName": "",
+  "email": ""
+}
+
+# Committee User Profile
+
+get_pending_committee_access_requests_payload = {
+  "pageNumber": "",
+  "searchKeyword": "",
+  "pageSize": "",
+  "sortColumn": "",
+  "sortDirection": ""
+}
+
+update_committee_access_status_payload = {
+  "id": "",
+  "accessStatus": ""
+}
+
+# Committee Users
+
+get_my_committee_users_data_list_payload = {
+  "pageNumber": "",
+  "searchKeyword": "",
+  "pageSize": "",
+  "sortColumn": "",
+  "sortDirection": "",
+  "orgId": "",
+  "firstName": "",
+  "lastName": "",
+  "userRole": ""
+}
+
+get_my_committee_invite_user_data_list_payload = {
+  "pageNumber": "",
+  "searchKeyword": "",
+  "pageSize": "",
+  "sortColumn": "",
+  "sortDirection": "",
+  "firstName": "",
+  "lastName": "",
+  "userName": "",
   "email": ""
 }
