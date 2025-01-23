@@ -1,3 +1,5 @@
+import logging
+
 from utils import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -465,4 +467,127 @@ def test_get_my_profile_notifications():
 
     except Exception as e:
         logging.error(f"Error in test_get_my_profile_notifications: {e}")
+        raise e
+
+
+# My Profile
+def test_get_profile_details_by_userid_user_question_info_update_security_questions():
+    try:
+        authorization_token = get_committee_token()
+
+        response = requests.get(dev_auth_url + get_profile_details_by_userid, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data={})
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        user_profile = response_data.get("responseData", {}).get("userProfile", {})
+
+        for key, value in user_profile.items():
+            logging.info(f"{key}: {value}")
+
+        logging.info("Profile Details fetched successfully with correct response.")
+
+        # Get User Question Info
+        logging.info('------ Get User Question Info ------')
+        response = requests.get(dev_auth_url + get_user_question_info, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data={})
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        security_questions = response_data.get("responseData", [])
+        for item in security_questions:
+            logging.info(f"Question: {item['question']}")
+            logging.info(f"Answer: {item['answer']}")
+
+        logging.info("User Question Info fetched successfully with correct response.")
+    #     Update User Question & Answer Info
+        logging.info('------ Update User Question & Answer Info ------')
+        payload = update_question_answer_info_payload.copy()
+        payload["updateQuestionAnswerInfo"][0]["sid"] = 1003
+        payload["updateQuestionAnswerInfo"][0]["qid"] = 1000
+        payload["updateQuestionAnswerInfo"][0]["answer"] = "1"
+
+        response = requests.post(dev_auth_url + update_question_answer_info,
+                                 headers={'Authorization': authorization_token,'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+
+        update_response_data = response.json()
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert update_response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert update_response_data.get("responseData") == "Security questions updated successfully.", \
+            f"Unexpected message: {update_response_data.get("message")}"
+        logging.info('Security questions updated successfully.')
+
+    except Exception as e:
+        logging.error(f"Error in test_get_profile_details_by_userid_user_question_info_update_security_questions: {e}")
+        raise e
+
+
+def test_update_user_profile_and_profile_password():
+    try:
+        authorization_token = get_admin_token()
+    #     Update user profile
+        logging.info('------ Update user profile ------')
+
+        random_number = generate_random_mobile_number()
+        logging.info(random_number)
+
+        payload = update_user_profile_payload.copy()
+        payload["email"] = "cfrs-noreply@tgstechnology.com"
+        payload["contactNumber"] = str(random_number)
+
+        response = requests.post(dev_auth_url + update_user_profile,
+                                 headers={'Authorization': authorization_token,'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+
+        update_response_data = response.json()
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert update_response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert update_response_data.get("message") == "User profile updated successfully.", \
+            f"Unexpected message: {update_response_data.get("message")}"
+        logging.info('User profile updated successfully.')
+
+    #    Update profile password
+        logging.info('------ Update profile password ------')
+
+        payload = update_profile_password_payload.copy()
+        payload["password"] = ""
+        payload["oldPassword"] = ""
+        payload["newPassword"] = ""
+
+        response = requests.post(dev_auth_url + update_profile_password,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+
+        update_response_data = response.json()
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert update_response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert update_response_data.get("message") == "", \
+            f"Unexpected message: {update_response_data.get("message")}"
+        logging.info('User profile password successfully.')
+
+    except Exception as e:
+        logging.error(f"Error in test_update_user_profile_and_profile_password: {e}")
         raise e

@@ -935,3 +935,25 @@ get_my_committee_invite_user_data_list_payload = {
   "userName": "",
   "email": ""
 }
+
+# My Profile
+update_question_answer_info_payload = {
+  "updateQuestionAnswerInfo": [
+    {
+      "sid": "",
+      "qid": "",
+      "answer": ""
+    }
+    ]
+}
+
+update_profile_password_payload = {
+  "password": "",
+  "oldPassword": "",
+  "newPassword": ""
+}
+
+update_user_profile_payload = {
+    "email": "",
+    "contactNumber": ""
+}

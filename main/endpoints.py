@@ -30,13 +30,23 @@ get_app_page_configuration = 'api/Auth/AppConfigure/getAppPageConfig'
 # Committee User Profile
 get_pending_committee_access_requests = 'api/Auth/CommitteeUserProfile/getPendingCommitteeAccessRequests'
 update_committee_access_status = '/api/Auth/CommitteeUserProfile/updateCommitteeAccessStatus'
+
 # Committee Users
 get_my_committee_users_data_list = 'api/Auth/CommitteeUsers/getMyCommitteeUsersDataList'
 get_my_committee_invite_users_data_list = 'api/Auth/CommitteeUsers/getMyCommitteeInviteUsersDataList'
+
 # User Access
 get_user_registration_count = 'api/Auth/UserAccess/getUseRegistrationCount'
+
 # My Profile Messages
 get_my_profile_notifications = 'api/Auth/MyProfileMessage/getMyProfileNotifications'
+
+# My Profile
+get_profile_details_by_userid = 'api/Auth/MyProfile/getProfileDetailsByUserId'
+get_user_question_info = 'api/Auth/MyProfile/getUserQuestionInfo'
+update_question_answer_info = 'api/Auth/MyProfile/updateUserQuestion'
+update_user_profile = 'api/Auth/MyProfile/updateUserProfile'
+update_profile_password = 'api/Auth/MyProfile/updateProfilePassword'
 
 
 # transaction
