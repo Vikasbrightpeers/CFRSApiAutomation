@@ -1,4 +1,23 @@
 import json
+#
+state_cfs_admin = "STA"
+system_cfs_administrator = "ASU"
+Approve = "Approve"
+Remove = "Remove"
+
+admin_module = "CFA/"
+public_module = "CFP/"
+registrant_module = "CFR/"
+
+new_registration_screen = "New%20Registration"
+dashboard_screen = "Dashboard"
+
+
+# orgId": 48
+# qid": "1000
+# ["orgId"] = str(406)
+# payload["orgId"] = "1"
+# orgId": 408
 
 # ---------- usernames & passwords -------
 DEV_ADMIN_USERNAME = "ETHAdmin"
@@ -843,7 +862,7 @@ get_all_committee_transactions_payload = json.dumps({
   "orgSubTypeCode": ""
 })
 
-# Auth
+# ----------------- Auth -----------------
 
 post_get_administrative_data_list_payload = {
   "pageNumber": "",
@@ -868,7 +887,6 @@ post_register_user_payload = {
     "firstName": "",
     "middleName": "",
     "lastName": "",
-    "isAdmin": True,
     "userAccountStatus": True,
     "isLocked": False
 }
@@ -956,4 +974,110 @@ update_profile_password_payload = {
 update_user_profile_payload = {
     "email": "",
     "contactNumber": ""
+}
+
+# Manage User
+
+get_user_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10
+}
+
+force_user_to_change_on_next_login_payload = {
+  "password": "",
+  "oldPassword": "",
+  "newPassword": ""
+}
+
+create_system_generated_password_payload = {
+  "id": "",
+  "password": "",
+  "oldPassword": "",
+  "newPassword": ""
+}
+
+create_new_password_payload = {
+  "id": "",
+  "password": "",
+  "oldPassword": "",
+  "newPassword": ""
+}
+
+add_user_access_payload = {
+    "roleCode": "",
+    "userId": ""
+}
+
+add_user_access_committee_payload = {
+    "roleCode": "",
+    "orgId": "",
+    "userId": ""
+}
+
+
+update_user_access_status_payload = {
+    "id": "",
+    "accessStatus": ""
+}
+
+get_admin_role_by_user_data_list_payload = {
+    "userId": "",
+    "entityId": "",
+    "orgName": "",
+    "orgType": "",
+    "orgAccessStatus": "",
+    "userRole": "",
+    "pageNumber": 1,
+    "pageSize": 10
+}
+
+get_user_committee_access_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10
+}
+
+get_user_role_by_user_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "entityId": "",
+    "orgName": "",
+    "orgType": "",
+    "orgAccessStatus": "",
+    "userRole": "",
+    "userId": "",
+    "isAdmin": True
+}
+
+# My Committee
+
+get_all_org_pending_registrations_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10
+}
+
+get_my_committee_list_payload = {
+    "committeeType": "",
+    "userRole": "",
+    "entityId": "",
+    "committeeName": ""
+}
+
+get_user_login_session_by_org_id_payload = {
+    "orgId": "",
+    "isAdmin": False,
+    "pageNumber": 1,
+    "searchKeyword": "",
+    "pageSize": 10,
+    "sortColumn": "",
+    "sortDirection": ""
+}
+
+get_user_reporting_activity_by_org_id_payload = {
+    "orgId": "",
+    "isAdmin": False,
+    "pageNumber": 1,
+    "searchKeyword": "",
+    "pageSize": 10,
+    "sortColumn": "",
+    "sortDirection": ""
 }

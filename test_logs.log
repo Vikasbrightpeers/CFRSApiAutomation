@@ -1,6 +1,4 @@
-INFO     root:utils.py:30 Token fetched successfully.
-INFO     root:test_auth.py:549 ------ Update User Question & Answer Info ------
-INFO     root:test_auth.py:551 8107391121
-INFO     root:test_auth.py:561 Response Status Code: 200
-INFO     root:test_auth.py:562 Response Body: {"isSuccess":true,"responseData":{"firstName":"Ethics","lastName":"Admin","middleName":"","userAccountStatus":true,"isLocked":false,"isAdmin":true,"forcePasswordReset":false,"isFirstTimeLogin":false,"createdDate":"2025-01-23T02:12:09.243","lastPasswordUpdatedDate":"2025-01-23T02:12:09.243","countryCodeID":null,"sharedKey":"CZD2WYGF5AKSDWL3JWZKAFVHJ7ZWFODQ","id":"d89b70bd-eb80-406f-af0c-07ceb247618b","userName":"ETHAdmin","normalizedUserName":"ETHADMIN","email":"cfrs-noreply@tgstechnology.com","normalizedEmail":"CFRS-NOREPLY@TGSTECHNOLOGY.COM","emailConfirmed":false,"passwordHash":"AQAAAAIAAYagAAAAEC7UQsNM/6Hplf1HVnn2OymWCmKNRnq0ijIvW7WLWocz7CaVaSDiileGpvROAJoYvg==","securityStamp":"KZM4PSJFM2563AXGXQ5TNKIOAA7MFNPL","concurrencyStamp":"6c9cc179-db0f-4763-ba36-66500e33af4d","phoneNumber":"8107391121","phoneNumberConfirmed":false,"twoFactorEnabled":false,"lockoutEnd":null,"lockoutEnabled":true,"accessFailedCount":0},"message":"User profile updated successfully."}
-INFO     root:test_auth.py:567 User profile updated successfully.
+INFO     root:utils.py:14 Token fetched successfully.
+INFO     root:test_auth.py:45 Response Status Code: 200
+INFO     root:test_auth.py:46 Response Body: {"isSuccess":true,"responseData":[{"code":1,"description":"Late Reports","isActive":true},{"code":2,"description":"Email","isActive":true},{"code":3,"description":"Communication","isActive":true},{"code":4,"description":"Registration","isActive":true},{"code":5,"description":"Call","isActive":true}],"message":null}
+INFO     root:test_auth.py:51 Admin notes category fetched successfully with correct response.

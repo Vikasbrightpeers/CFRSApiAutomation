@@ -5,6 +5,22 @@ from randomfunctions import *
 from endpoints import *
 
 
+def get_token(payload):
+    try:
+        response = requests.post(dev_auth_url + dev_login_url, json=payload)
+
+        if response.status_code == 200:
+            token = response.json().get("accessToken")
+            logging.info("Token fetched successfully.")
+            return f"Bearer {token}"
+        else:
+            logging.error(f"Failed to fetch token. Status Code: {response.status_code}, Response: {response.text}")
+            raise Exception("Login failed. Cannot retrieve token.")
+    except Exception as e:
+        logging.error(f"Error in get_token: {e}")
+        raise e
+
+
 def get_committee_token():
     try:
         response = requests.post(dev_auth_url + dev_login_url, json=dev_login_committee_payload)
@@ -37,7 +53,7 @@ def get_admin_token():
         raise e
 
 
-def register_user_from_admin():
+def register_user_from_admin(is_admin):
     """
     Function to register a new user. Utilizes random data generation and admin token for authentication.
     Returns the response data, including the generated username.
@@ -59,9 +75,10 @@ def register_user_from_admin():
             "contactNumber": contact_number,
             "firstName": first_name,
             "lastName": last_name,
+            "isAdmin": is_admin
         })
 
-        admin_token = get_admin_token()
+        admin_token = get_token(dev_login_admin_payload)
 
         response = requests.post(
             dev_auth_url + add_and_update_user,
@@ -86,4 +103,5 @@ def register_user_from_admin():
 
     except Exception as e:
         logging.error(f"Error in register_user: {e}")
-        raise e
+        logging.info(response.text)
+        return False, e
