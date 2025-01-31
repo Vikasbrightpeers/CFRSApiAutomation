@@ -1,14 +1,12 @@
-import logging
-
 from utils import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Admin Dashboard
-def test_get_admin_role():
+def test_api_auth_admin_dashboard_001():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
         response = requests.get(dev_auth_url + dev_my_admin_role_list, headers={
             'Authorization': authorization_token,
@@ -33,9 +31,9 @@ def test_get_admin_role():
 
 
 # Administrative Notes
-def test_get_admin_notes_category():
+def test_api_auth_administrative_notes_001():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
         response = requests.get(dev_auth_url + dev_admin_notes_category, headers={
             'Authorization': authorization_token,
@@ -57,9 +55,9 @@ def test_get_admin_notes_category():
         raise e
 
 
-def test_get_administrative_data_list():
+def test_api_auth_administrative_notes_003():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
         payload = post_get_administrative_data_list_payload.copy()
         payload["pageNumber"] = 1
         payload["pageSize"] = 10
@@ -87,9 +85,9 @@ def test_get_administrative_data_list():
         raise e
 
 
-def test_add_administrative_notes():
+def test_api_auth_administrative_notes_002():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
         response = requests.post(dev_auth_url + dev_add_administrative_notes, headers={
             'Authorization': authorization_token,
@@ -114,9 +112,9 @@ def test_add_administrative_notes():
 
 
 # App Configure
-def test_website_configuration():
+def test_api_auth_app_configure_001():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
         response = requests.get(dev_auth_url + get_website_configuration, headers={
             'Authorization': authorization_token,
@@ -126,7 +124,7 @@ def test_website_configuration():
         response_data = response.json()
 
         logging.info(f"Response Status Code: {response.status_code}")
-        logging.info(f"Response Body: {response.text}")
+        # logging.info(f"Response Body: {response.text}")
 
         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
         assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
@@ -137,14 +135,13 @@ def test_website_configuration():
         raise e
 
 
-def app_page_configuration():
+def test_api_auth_app_configure_002():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
-        response = requests.get(dev_auth_url + get_app_page_configuration + "" + "", headers={
-            'Authorization': authorization_token,
-            'Content-Type': 'application/json'
-        }, data={})
+        response = requests.get(dev_auth_url + get_app_page_configuration + admin_module + new_registration_screen,
+                                headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                data={})
 
         response_data = response.json()
 
@@ -162,9 +159,10 @@ def app_page_configuration():
 
 
 # Register, Login, Forgot Password
-def test_register_forgot_username():
+def test_api_auth_register_001_api_auth_forgot_username_001():
     try:
-        user_data = register_user_from_admin()
+        is_admin = True
+        user_data = register_user_from_admin(is_admin)
         response_data = user_data.get("responseData", {})
         user_name = response_data.get("userName")
         logging.info(f"Username: {user_name}")
@@ -202,11 +200,13 @@ def test_register_forgot_username():
 
         logging.info(f"Update Contribution -  Status Code: {forgot_user_name_response.status_code}")
 
-        assert forgot_user_name_response.status_code == 200, f"Unexpected status code: {forgot_user_name_response.status_code}"
+        assert forgot_user_name_response.status_code == 200, (f"Unexpected status code: "
+                                                              f"{forgot_user_name_response.status_code}")
         assert forgot_user_name_response_data.get(
             "isSuccess") is True, "isSuccess is not True in forgot username response"
         assert (forgot_user_name_response_data.get("message") ==
-                "If the email address you entered is registered in this system, you will receive an email with your username shortly."), \
+                "If the email address you entered is registered in this system, "
+                "you will receive an email with your username shortly."), \
             f"Unexpected message in forgot username: {forgot_user_name_response_data.get('message')}"
 
         logging.info("Forgot username response appears successfully with 200 Status code.")
@@ -216,7 +216,7 @@ def test_register_forgot_username():
         raise e
 
 
-def test_login_admin():
+def test_api_auth_login_001():
     try:
         response = requests.post(dev_auth_url + dev_login_url, json=dev_login_admin_payload)
         response_data = response.json()
@@ -233,9 +233,10 @@ def test_login_admin():
 
 
 # Security Questions and Answer
-def test_save_and_verify_security_questions_and_answers():
+def test_api_auth_security_question_001_002():
     try:
-        user_data = register_user_from_admin()
+        is_admin = True
+        user_data = register_user_from_admin(is_admin)
         response_data = user_data.get("responseData", {})
         user_name = response_data.get("userName")
         authorization_token = user_data.get("token")
@@ -283,9 +284,9 @@ def test_save_and_verify_security_questions_and_answers():
         raise e
 
 
-def test_get_all_security_questions():
+def test_api_auth_security_question_003():
     try:
-        authorization_token = get_admin_token()
+        authorization_token = get_token(dev_login_admin_payload)
 
         response = requests.get(
             dev_auth_url + get_all_security_questions,
@@ -306,9 +307,9 @@ def test_get_all_security_questions():
 
 
 # Committee User Profile
-def test_get_pending_committee_access_requests_and_update_committee_access_status():
+def test_api_auth_committee_user_profile_001_002():
     try:
-        authorization_token = get_committee_token()
+        authorization_token = get_token(dev_login_committee_payload)
         payload = get_pending_committee_access_requests_payload.copy()
         payload["pageNumber"] = 1
         payload["pageSize"] = 10
@@ -361,9 +362,9 @@ def test_get_pending_committee_access_requests_and_update_committee_access_statu
 
 
 # Committee Users
-def test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data_list():
+def test_api_auth_committee_user_001_002():
     try:
-        authorization_token = get_committee_token()
+        authorization_token = get_token(dev_login_committee_payload)
 
         payload = get_my_committee_users_data_list_payload.copy()
         payload["pageNumber"] = 1
@@ -378,7 +379,8 @@ def test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data
 
         logging.info(f"Get My Committee User Data List  Status Code: {response_get_user_list.status_code}")
 
-        assert response_get_user_list.status_code == 200, f"Unexpected status code: {response_get_user_list.status_code}"
+        assert response_get_user_list.status_code == 200, (f"Unexpected status code: "
+                                                           f"{response_get_user_list.status_code}")
         assert response_data_get.get("isSuccess") is True, f"isSuccess is not True"
         logging.info(f"Committee User Data List Total Records:"
                      f" {response_data_get.get("responseData", {}).get("totalRecords")}")
@@ -407,14 +409,14 @@ def test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data
         logging.info("Committee Invite Users Data List response appears successfully with 200 Status code.")
 
     except Exception as e:
-        logging.error(f"Error in test_get_my_committee_users_data_list_and_get_my_committee_invite_users_data_list: {e}")
+        logging.error(f"Error in test_api_auth_committee_user_001_002:{e}")
         raise e
 
 
 # User Access
-def test_get_user_registration_count():
+def test_api_auth_user_access_001():
     try:
-        authorization_token = get_committee_token()
+        authorization_token = get_token(dev_login_committee_payload)
 
         response = requests.get(dev_auth_url + get_user_registration_count, headers={
             'Authorization': authorization_token,
@@ -436,14 +438,14 @@ def test_get_user_registration_count():
         logging.info("User registration count fetched successfully with correct response.")
 
     except Exception as e:
-        logging.error(f"Error in test_get_user_registration_count: {e}")
+        logging.error(f"Error in test_api_auth_user_access_001: {e}")
         raise e
 
 
 # My Profile Messages
-def test_get_my_profile_notifications():
+def test_api_auth_my_profile_message_001():
     try:
-        authorization_token = get_committee_token()
+        authorization_token = get_token(dev_login_committee_payload)
 
         response = requests.get(dev_auth_url + get_my_profile_notifications, headers={
             'Authorization': authorization_token,
@@ -471,9 +473,9 @@ def test_get_my_profile_notifications():
 
 
 # My Profile
-def test_get_profile_details_by_userid_user_question_info_update_security_questions():
+def test_api_auth_my_profile_001_004_005():
     try:
-        authorization_token = get_committee_token()
+        authorization_token = get_token(dev_login_committee_payload)
 
         response = requests.get(dev_auth_url + get_profile_details_by_userid, headers={
             'Authorization': authorization_token,
@@ -516,7 +518,7 @@ def test_get_profile_details_by_userid_user_question_info_update_security_questi
             logging.info(f"Answer: {item['answer']}")
 
         logging.info("User Question Info fetched successfully with correct response.")
-    #     Update User Question & Answer Info
+        #     Update User Question & Answer Info
         logging.info('------ Update User Question & Answer Info ------')
         payload = update_question_answer_info_payload.copy()
         payload["updateQuestionAnswerInfo"][0]["sid"] = 1003
@@ -524,7 +526,7 @@ def test_get_profile_details_by_userid_user_question_info_update_security_questi
         payload["updateQuestionAnswerInfo"][0]["answer"] = "1"
 
         response = requests.post(dev_auth_url + update_question_answer_info,
-                                 headers={'Authorization': authorization_token,'Content-Type': 'application/json'},
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
                                  data=json.dumps(payload))
 
         update_response_data = response.json()
@@ -537,14 +539,14 @@ def test_get_profile_details_by_userid_user_question_info_update_security_questi
         logging.info('Security questions updated successfully.')
 
     except Exception as e:
-        logging.error(f"Error in test_get_profile_details_by_userid_user_question_info_update_security_questions: {e}")
+        logging.error(f"Error in test_api_auth_my_profile_001_004_005: {e}")
         raise e
 
 
-def test_update_user_profile_and_profile_password():
+def test_api_auth_my_profile_002_003():
     try:
-        authorization_token = get_admin_token()
-    #     Update user profile
+        authorization_token = get_token(dev_login_admin_payload)
+        #     Update user profile
         logging.info('------ Update user profile ------')
 
         random_number = generate_random_mobile_number()
@@ -555,7 +557,7 @@ def test_update_user_profile_and_profile_password():
         payload["contactNumber"] = str(random_number)
 
         response = requests.post(dev_auth_url + update_user_profile,
-                                 headers={'Authorization': authorization_token,'Content-Type': 'application/json'},
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
                                  data=json.dumps(payload))
 
         update_response_data = response.json()
@@ -568,26 +570,403 @@ def test_update_user_profile_and_profile_password():
         logging.info('User profile updated successfully.')
 
     #    Update profile password
-        logging.info('------ Update profile password ------')
-
-        payload = update_profile_password_payload.copy()
-        payload["password"] = ""
-        payload["oldPassword"] = ""
-        payload["newPassword"] = ""
-
-        response = requests.post(dev_auth_url + update_profile_password,
-                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
-                                 data=json.dumps(payload))
-
-        update_response_data = response.json()
-        logging.info(f"Response Status Code: {response.status_code}")
-        logging.info(f"Response Body: {response.text}")
-        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
-        assert update_response_data.get("isSuccess") is True, "isSuccess is not True in response"
-        assert update_response_data.get("message") == "", \
-            f"Unexpected message: {update_response_data.get("message")}"
-        logging.info('User profile password successfully.')
+    #     logging.info('------ Update profile password ------')
+    #
+    #     payload = update_profile_password_payload.copy()
+    #     payload["password"] = ""
+    #     payload["oldPassword"] = ""
+    #     payload["newPassword"] = ""
+    #
+    #     response = requests.post(dev_auth_url + update_profile_password,
+    #                              headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+    #                              data=json.dumps(payload))
+    #
+    #     update_response_data = response.json()
+    #     logging.info(f"Response Status Code: {response.status_code}")
+    #     logging.info(f"Response Body: {response.text}")
+    #     assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    #     assert update_response_data.get("isSuccess") is True, "isSuccess is not True in response"
+    #     assert update_response_data.get("message") == "", \
+    #         f"Unexpected message: {update_response_data.get("message")}"
+    #     logging.info('User profile password successfully.')
 
     except Exception as e:
         logging.error(f"Error in test_update_user_profile_and_profile_password: {e}")
         raise e
+
+
+# Manage User
+def test_api_auth_manage_user_001_002_003():
+    try:
+        # Add user
+        logging.info("------ Add user ------")
+        is_admin = True
+        add_user = register_user_from_admin(is_admin)
+        logging.info(add_user)
+        logging.info(add_user["message"])
+        response_data = add_user.get("responseData", {})
+        user_name = response_data.get("userName")
+        logging.info(user_name)
+        logging.info(response_data.get("firstName"))
+        logging.info(response_data.get("lastName"))
+        logging.info(response_data.get("email"))
+        assert add_user["message"] == "User added successfully.", f"Unexpected message: {add_user["message"]}"
+        logging.info("User added successfully with correct response.")
+        user_id = response_data.get("id")
+        logging.info(user_id)
+
+        #   Update user
+        #   Get User List
+        logging.info("------ Get User List ------")
+        authorization_token = get_token(dev_login_admin_payload)
+        response = requests.post(dev_auth_url + get_user_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_user_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"User list Total Records:" f" {response_data.get("responseData", {}).get("totalRecords")}")
+        logging.info("User list fetched successfully with correct response.")
+
+        #   Get User Profile By ID
+        logging.info("------ Get User Profile By ID ------")
+        response = requests.get(dev_auth_url + get_user_profile_by_id + str(user_id), headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=())
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info("User Profile fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(e)
+
+
+def test_api_auth_manage_user_007_008():
+    try:
+        #   Get All User Role
+        logging.info("------ Get All User Role ------")
+        authorization_token = get_token(dev_login_admin_payload)
+        response = requests.get(dev_auth_url + get_all_user_role, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_user_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"User list Total Records:" f" {response_data.get("responseData", {}).get("totalRecords")}")
+        logging.info("User Role list fetched successfully with correct response.")
+
+        #   Get All Admin Role
+        logging.info("------ Get All Admin Role ------")
+        response = requests.get(dev_auth_url + get_all_admin_role, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_user_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"User list Total Records:" f" {response_data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Admin Role fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(e)
+
+
+def test_api_auth_manage_user_009_011_013():
+    try:
+        # Add user
+        logging.info("------ Add user ------")
+        is_admin = True
+        add_user = register_user_from_admin(is_admin)
+        assert add_user != False
+        logging.info(add_user)
+        logging.info(add_user["message"])
+        response_data = add_user.get("responseData", {})
+        user_name = response_data.get("userName")
+        logging.info(user_name)
+        assert add_user["message"] == "User added successfully.", f"Unexpected message: {add_user["message"]}"
+        logging.info("User added successfully with correct response.")
+        user_id = response_data.get("id")
+        logging.info(user_id)
+        authorization_token = get_token(dev_login_admin_payload)
+        # Add User Access
+        logging.info("------ Add User Access  ------")
+        payload = add_user_access_payload.copy()
+        payload["roleCode"] = state_cfs_admin
+        payload["userId"] = str(user_id)
+        response = requests.post(dev_auth_url + add_user_access, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "User access added successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info("User access added successfully")
+        role_id = response_data.get("responseData", {}).get("id")
+        logging.info(role_id)
+
+        # Update User Access
+        logging.info("------ Update User Access ------")
+        payload = update_user_access_status_payload.copy()
+        payload["id"] = role_id
+        payload["accessStatus"] = Approve
+
+        response = requests.post(dev_auth_url + update_user_access_status, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "User access status updated successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info('User access status updated successfully.')
+
+        #   Get Admin Role By User Data List
+        logging.info("------ Get Admin Role By User Data List  ------")
+        payload = get_admin_role_by_user_data_list_payload.copy()
+        payload["roleCode"] = state_cfs_admin
+        payload["userId"] = user_id
+
+        response = requests.post(dev_auth_url + get_admin_role_by_user_data_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+
+        # Extract and log userRole and accessStatus
+        data = response_data.get("responseData", {}).get("data", [])
+        if data:
+            for item in data:
+                user_role = item.get("userRole", "").strip()
+                access_status = item.get("accessStatus", "Unknown")
+                logging.info(f"User Role: {user_role}, Access Status: {access_status}")
+        else:
+            logging.info("No data found in the response.")
+
+        logging.info("Admin role access status fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.info(e)
+
+
+def test_api_auth_manage_user_010_012():
+    try:
+        # Add user
+        logging.info("------ Add user ------")
+        is_admin = False
+        add_user = register_user_from_admin(is_admin)
+        assert add_user != False
+        logging.info(add_user)
+        logging.info(add_user["message"])
+        response_data = add_user.get("responseData", {})
+        user_name = response_data.get("userName")
+        logging.info(user_name)
+        assert add_user["message"] == "User added successfully.", f"Unexpected message: {add_user["message"]}"
+        logging.info("User added successfully with correct response.")
+        user_id = response_data.get("id")
+        logging.info(user_id)
+        authorization_token = get_token(dev_login_admin_payload)
+
+        # Add User Access
+        logging.info("------ Add User Access  ------")
+        payload = add_user_access_committee_payload.copy()
+        payload["roleCode"] = state_cfs_admin
+        payload["orgId"] = 408
+        payload["userId"] = str(user_id)
+        response = requests.post(dev_auth_url + add_user_access, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "User access added successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info("User access added successfully")
+        role_id = response_data.get("responseData", {}).get("id")
+        logging.info(role_id)
+
+        #   Get User Role By User Data List
+        logging.info("------ Get User Role By User Data List  ------")
+        payload = get_user_role_by_user_data_list_payload.copy()
+        payload["userId"] = user_id
+
+        response = requests.post(dev_auth_url + get_user_role_by_user_data_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+
+        # Extract and log userRole and accessStatus
+        data = response_data.get("responseData", {}).get("data", [])
+        if data:
+            for item in data:
+                user_role = item.get("userRole", "").strip()
+                access_status = item.get("accessStatus", "Unknown")
+                logging.info(f"User Role: {user_role}, Access Status: {access_status}")
+        else:
+            logging.info("No data found in the response.")
+
+        logging.info("User role access status fetched successfully with correct response.")
+
+        # Get Users Committee Access Data List
+        logging.info("------ Get Users Committee Access Data List  ------")
+        response = requests.post(dev_auth_url + get_user_committee_access_data_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_user_committee_access_data_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+        logging.info("Users Committee Access Data List fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(e)
+
+
+# My Committee
+def test_api_auth_my_committee_001_002_004_005():
+    try:
+
+        authorization_token = get_token(dev_login_committee_payload)
+        # Get All Org Pending Registration Data List
+        logging.info("------ Get All Org Pending Registration Data List  ------")
+        response = requests.post(dev_auth_url + get_all_org_pending_registrations_data_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_all_org_pending_registrations_data_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+        logging.info("All Org Pending Registration Data List fetched successfully with correct response.")
+
+        # Get My Committee List
+        logging.info("------ Get My Committee List  ------")
+        response = requests.post(dev_auth_url + get_my_committee_list, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(get_my_committee_list_payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+        logging.info("My Committee List fetched successfully with correct response.")
+
+        # Get User Login Sessions By Org ID
+        logging.info("------ Get User Login Sessions By Org ID  ------")
+        payload = get_user_login_session_by_org_id_payload.copy()
+        payload["orgId"] = "1"
+        response = requests.post(dev_auth_url + get_user_login_session_by_org_id, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+        logging.info("User Login Sessions By Org ID fetched successfully with correct response.")
+
+        # Get User Reporting Activity By Org ID
+        logging.info("------ Get User Reporting Activity By Org ID  ------")
+        payload = get_user_reporting_activity_by_org_id_payload.copy()
+        payload["orgId"] = "1"
+        response = requests.post(dev_auth_url + get_user_reporting_activity_by_org_id, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+
+        total_records = response_data.get("responseData", {}).get("totalRecords", 0)
+        logging.info(f"Total Records: {total_records}")
+        logging.info("User User Reporting Activity By Org ID fetched successfully with correct response.")
+
+    except Exception as e:
+        logging.error(e)
