@@ -1,4 +1,5 @@
 import json
+from randomfunctions import *
 #
 state_cfs_admin = "STA"
 system_cfs_administrator = "ASU"
@@ -211,6 +212,196 @@ get_all_transactions_payload = json.dumps({
     "sortDirection": "desc"
 })
 
+post_random_candidate_registration_payload = json.dumps({
+    "organization": {
+        "orgTypeCode": "101",
+        "orgSubtypeCode": "CNDT",
+        "orgName": generate_random_organization_name(),
+        "isJointFundrisingOrg": True,
+        "primaryPhone": generate_random_mobile_number(),
+        "alternatePhone": generate_random_mobile_number(),
+        "email": generate_random_email(),
+        "alternateEmail1": generate_random_email(),
+        "website": generate_random_website(),
+        "affiliation": "",
+        "filerType": "",
+        "filerPlaceofBussiness": "",
+        "orgStatusCode": "ACTV",
+        "isCandidateAsATresurer": True
+    },
+    "orgRegistration": {
+        "electionID": 1000,
+        "officeID": 233,
+        "districtID": 0,
+        "partyCode": "ACT"
+    },
+    "residentialAddress": {
+        "addressLine1": generate_random_address_line_1(),
+        "addressLine2": "",
+        "city": "Charleston",
+        "stateCode": "WV",
+        "countyCode": "1",
+        "countryCode": "USA",
+        "zipCode": generate_random_zipcode(),
+        "zipExt": "8282"
+    },
+    "mailingAddress": {
+        "addressLine1": generate_random_address_line_1(),
+        "addressLine2": "",
+        "city": "Charleston",
+        "stateCode": "WV",
+        "countyCode": "1",
+        "countryCode": "USA",
+        "zipCode": generate_random_zipcode(),
+        "zipExt": "8282"
+    },
+    "person": {
+        "prefixCode": "104",
+        "firstName": generate_first_name(),
+        "middleName": generate_middle_name(),
+        "lastName": generate_last_name(),
+        "suffixCode": "103"
+    },
+    "officerModelList": [
+        {
+            "mailingAddress": {
+                "addressLine1": generate_random_address_line_1(),
+                "addressLine2": "",
+                "city": "Charleston",
+                "stateCode": "WV",
+                "countyCode": "",
+                "countryCode": "USA",
+                "zipCode": generate_random_zipcode(),
+                "zipExt": "8282"
+            },
+            "person": {
+                "prefixCode": "104",
+                "firstName": generate_first_name(),
+                "middleName": generate_middle_name(),
+                "lastName": generate_last_name(),
+                "suffixCode": "103",
+                "primaryPhone": generate_random_mobile_number(),
+                "alternatePhone": generate_random_mobile_number(),
+                "email": generate_random_email()
+            },
+            "orgOfficer": {
+                "officerTypeCode": "TRE"
+            }
+        }
+    ]
+})
+
+correct_registration_payload = {
+  "orgDetails": {
+    "orgID": "",
+    "orgVersID": 1,
+    "orgTypeCode": "101",
+    "orgSubtypeCode": "CNDT",
+    "orgName": generate_random_organization_name(),
+    "isJointFundrisingOrg": True,
+    "affiliation": "",
+    "filerPlaceofBussiness": "",
+    "orgStatusCode": "ACTV",
+    "registrationID": 7520,
+    "electionID": 1000,
+    "officeID": 233,
+    "districtID": 0,
+    "partyCode": "ACT",
+    "orgAddressID": 0,
+    "mailingAddressID": 0,
+    "primaryPhone": "7625305591",
+    "alternatePhone": "9125810723",
+    "website": "https://mmknvix.io",
+    "email": "ehzgi3FF@ymail.com",
+    "alternateEmail1": "mp83VG@ymail.com",
+    "orgAddressLine1": "",
+    "orgAddressLine2": "",
+    "orgCity": "",
+    "orgStateCode": "",
+    "OrgZipCode": "",
+    "OrgZipExt": "",
+    "orgCountyCode": "1",
+    "orgCountryCode": "USA",
+    "isCandidateAsATresurer": True
+  },
+  "officersDetails": [
+    {
+      "officerTypeCode": "CAN",
+      "isMailingAddressUpdated": True,
+      "isRecordUpdated": True,
+      "IsPersonUpdated": True,
+      "orgOfficerID": 8167,
+      "personID": 872,
+      "personVersionID": 1,
+      "addressID": 8449,
+      "prefixCode": "104",
+      "firstName": "Otgwkt",
+      "middleName": "B",
+      "lastName": "Dvheog",
+      "suffixCode": "103",
+      "primaryPhone": "",
+      "alternatePhone": "",
+      "email": "",
+      "addressLine1": "8108 Oak Street",
+      "addressLine2": "",
+      "city": "Charleston",
+      "stateCode": "WV",
+      "countyCode": "1",
+      "zipCode": "23709",
+      "zipExt": "8282",
+      "countryCode": "USA",
+      "statusCode": "ACTV",
+      "mailingAddressID": 8450,
+      "mailingAddressLine1": "4135 Oak Street",
+      "mailingAddressLine2": "23",
+      "mailingCity": "Charleston",
+      "mailingStateCode": "WV",
+      "mailingCountyCode": "1",
+      "mailingZipCode": "75814",
+      "mailingZipExt": "8282",
+      "mailingCountryCode": "USA"
+    },
+    {
+      "orgOfficerID": 8168,
+      "officerTypeCode": "TRE",
+      "personID": 873,
+      "personVersionID": 1,
+      "isMailingAddressUpdated": False,
+      "isRecordUpdated": False,
+      "IsPersonUpdated": False,
+      "prefixCode": "104",
+      "firstName": "Qrcixx",
+      "middleName": "J",
+      "lastName": "Yutbfe",
+      "suffixCode": "103",
+      "primaryPhone": "8628274347",
+      "alternatePhone": "8046633389",
+      "email": "ZSCueo4r@ymail.com",
+      "addressID": 0,
+      "addressLine1": "",
+      "addressLine2": "",
+      "city": "Charleston",
+      "stateCode": "",
+      "countyCode": "",
+      "zipCode": "45284-8282",
+      "zipExt": "",
+      "countryCode": "",
+      "mailingAddressID": 8451,
+      "mailingAddressLine1": "5238 Walnut Street",
+      "mailingAddressLine2": "",
+      "mailingCity": "Charleston",
+      "mailingStateCode": "WV",
+      "mailingCountyCode": "",
+      "mailingZipCode": "45284",
+      "mailingZipExt": "8282",
+      "mailingCountryCode": "USA",
+      "statusCode": "ACTV"
+    }
+  ],
+  "isOrgAddressUpdated": False,
+  "isCandidateAddressUpdated": False,
+  "IsCorrectRegistration": True
+}
 # Registrations
 post_candidate_registration_payload = json.dumps({
   "organization": {
@@ -1081,3 +1272,28 @@ get_user_reporting_activity_by_org_id_payload = {
     "sortColumn": "",
     "sortDirection": ""
 }
+
+
+# Notification
+get_all_notification_payload = json.dumps({
+            "pageNumber": 1,
+            "searchKeyword": "",
+            "pageSize": 1,
+            "sortColumn": "",
+            "sortDirection": "",
+            "notificationType": "",
+            "notificationName": "",
+            "postDate": "",
+            "viewMode": "",
+            "notificationStatus": "active"
+        })
+
+add_edit_notification_payload = json.dumps({
+    "id": 0,
+    "title": "Hello ",
+    "adminNotification": "this is description",
+    "viewStatus": "abcd",
+    "adminNotificationType": "abcd",
+    "postDate": "2024-10-10",
+    "viewMode": "abcd"
+})

@@ -84,5 +84,17 @@ return_transactions = 'CommitteeTransactions/addRetunTransaction'
 post_registration = 'CommitteeRegistration/submitCommitteeRegistrationData'
 get_all_committee_registrations = 'CommitteeRegistration/getAllCommitteeRegistrationDataList'
 
-# Notification
-notificationUrl = dev_admin_url + '/Notification/'
+# Admin
+# Notifications
+get_all_notifications_type = 'Notification/getAllNotificationType'
+get_all_notification_view_status = 'Notification/getAllNotificationViewStatus'
+get_all_notifications_data_list = 'Notification/getAllAdminNotificationDataList'
+add_edit_notification = 'Notification/addEditNotification'
+delete_notification = 'Notification/deleteNotificationById/'
+get_notification_by_Id = 'Notification/getNotificationDetailsById/'
+get_all_notification_for_badges = 'Notification/getAllAdminNotificationForBadges'
+get_all_admin_notification = 'Notification/getAllAdminNotification'
+
+# Committee Summary
+get_org_details_for_correct_registration_by_org_id = 'CommitteeSummary/getOrgDetailsForCorrectRegistrationByOrgID/'
+submit_correct_registration = 'CommitteeSummary/submitCorrectOrgRegistration/'

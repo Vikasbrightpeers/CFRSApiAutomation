@@ -10,7 +10,7 @@ def test_post_candidate_registration():
         response = requests.post(dev_admin_url + post_registration, headers={
             'Authorization': authorization_token,
             'Content-Type': 'application/json'
-        }, data=post_candidate_registration_payload)
+        }, data=post_random_candidate_registration_payload)
 
         response_data = response.json()
 
@@ -128,7 +128,6 @@ def test_post_iec_individual_registration():
             'Authorization': authorization_token,
             'Content-Type': 'application/json'
         }, data=post_IEC_individual_registration_payload)
-
 
         response_data = response.json()
 
