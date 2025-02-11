@@ -13,6 +13,8 @@ registrant_module = "CFR/"
 new_registration_screen = "New%20Registration"
 dashboard_screen = "Dashboard"
 
+Accept_Conditionally = 'CNDA'
+Reject = 'RJCT'
 
 # orgId": 48
 # qid": "1000
@@ -402,6 +404,7 @@ correct_registration_payload = {
   "isCandidateAddressUpdated": False,
   "IsCorrectRegistration": True
 }
+
 # Registrations
 post_candidate_registration_payload = json.dumps({
   "organization": {
@@ -1053,6 +1056,21 @@ get_all_committee_transactions_payload = json.dumps({
   "orgSubTypeCode": ""
 })
 
+get_all_officer_information_by_org_id_payload = {
+  "orgId": "",
+  "pageNumber": 1,
+  "searchKeyword": "",
+  "pageSize": 10,
+  "sortColumn": "",
+  "sortDirection": ""
+}
+
+edit_pending_org_registration_status_payload = {
+    "orgStatusCode": "",
+    "orgStatusReasonCode": "",
+    "statusReasonComment": "",
+    "orgId": ""
+}
 # ----------------- Auth -----------------
 
 post_get_administrative_data_list_payload = {
@@ -1297,3 +1315,85 @@ add_edit_notification_payload = json.dumps({
     "postDate": "2024-10-10",
     "viewMode": "abcd"
 })
+
+# correspondence
+get_correspondence_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 387,
+    "electionID": None,
+    "reportingCycleID": None,
+    "reportingDueDate": None,
+    "reportingEndDate": None,
+    "reportingPeriodID": None,
+    "committeeName": None,
+    "committeeStatus": None,
+    "committeeType": None,
+    "noticeType": None
+}
+
+get_org_info_for_correspondence_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 387,
+    "electionID": None,
+    "reportingCycleID": None,
+    "reportingDueDate": None,
+    "reportingEndDate": None,
+    "reportingPeriodID": None,
+    "committeeName": None,
+    "committeeStatus": None,
+    "committeeType": None,
+    "noticeType": None
+}
+
+add_correspondence_payload = {
+    "orgInfo": [
+        {
+            "orgID": 430
+        },
+        {
+            "orgID": 429
+        },
+        {
+            "orgID": 428
+        }
+    ],
+    "noticeTypeCode": "GRN",
+    "subject": "Due date for filing",
+    "body": "<!DOCTYPE html>\n    <html lang=\"en\">\n    <head>\n      "
+            "<meta charset=\"UTF-8\">\n      <meta name=\"viewport\" content=\"width=device-width, "
+            "initial-scale=1.0\">\n      <title>Email</title>\n    </head>\n    <body>\n      "
+            "<p>Due date for filing should not be accepted</p>\n    "
+            "</body>\n    </html>",
+    "scheduleDate": "2025-02-07"
+}
+
+get_org_filed_report_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "sortColumn": "",
+    "sortDirection": "",
+    "committeeName": "",
+    "reportName": "",
+    "filedBeginDate": None,
+    "filedEndDate": None,
+    "dueDateBeginDate": None,
+    "dueDateEndDate": None,
+    "reportStatus": ""
+}
+
+# Get All Org Documents Data List
+get_all_org_documents_data_list_payload = {
+    "orgID": "",
+    "documentID": 0,
+    "documentName": "",
+    "committeeName": "",
+    "documentType": "",
+    "receivedDate": "",
+    "documentPrivacy": "",
+    "searchKeyword": "",
+    "pageNumber": 1,
+    "pageSize": 10,
+    "sortColumn": "",
+    "sortDirection": "",
+    "privacyTypeCode": "AD,PR"
+}

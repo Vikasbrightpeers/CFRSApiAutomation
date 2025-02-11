@@ -1,11 +1,13 @@
-# ----------------------url's and endpoints-------------------------------------------
+# ---------------------- url's and endpoints-------------------------------------------
 
 dev_auth_url = 'https://cfs-auth-dev.tgstechnology.net/'
 # dev_auth_url = 'https://cfs-auth-qa.tgstechnology.net/'
 test_auth_url = 'https://test-cfrs-auth.tgstechnology.net/'
 qa_auth_url = 'https://cfs-auth-qa.tgstechnology.net/'
 
-dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
+# dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
+dev_admin_url = 'https://test-cfrs-admin.tgstechnology.net/api/Admin/'
+
 qa_admin_url = 'https://cfs-admin-qa.tgstechnology.net/api/Admin/'
 
 dev_committee_url = 'https://cfs-committee-dev.tgstechnology.net/api/Committee/'
@@ -83,6 +85,11 @@ return_transactions = 'CommitteeTransactions/addRetunTransaction'
 # registration
 post_registration = 'CommitteeRegistration/submitCommitteeRegistrationData'
 get_all_committee_registrations = 'CommitteeRegistration/getAllCommitteeRegistrationDataList'
+get_committee_profile_by_org_id = 'CommitteeRegistration/getCommitteeProfileByOrgId/'
+get_all_officer_information_by_org_id = 'CommitteeRegistration/getAllOfficersInformationByOrgId/'
+edit_pending_org_registration_status = 'CommitteeRegistration/editPendingOrgRegistrationStatus/'
+get_all_org_reasons_by_status_code = 'CommitteeRegistration/getAllOrgReasonsByStatusCode/'
+view_org_registration_report = 'CommitteeRegistration/viewOrgRegistrationReport/'
 
 # Admin
 # Notifications
@@ -98,3 +105,19 @@ get_all_admin_notification = 'Notification/getAllAdminNotification'
 # Committee Summary
 get_org_details_for_correct_registration_by_org_id = 'CommitteeSummary/getOrgDetailsForCorrectRegistrationByOrgID/'
 submit_correct_registration = 'CommitteeSummary/submitCorrectOrgRegistration/'
+
+# Committee Transactions Chart
+get_contribution_chart_data = 'CommitteeTransactions/getContributionChartData'
+get_expenditure_chart_data = 'CommitteeTransactions/getExpenditureChartData'
+
+# correspondence
+get_org_info_for_correspondence_data_list = 'Correspondence/getOrgInfoForCorrespondenceDataList'
+get_correspondence_data_list = 'Correspondence/getCorrespondenceDataList'
+add_correspondence = 'Correspondence/addCorrespondence'
+
+# Committee Report
+get_org_filed_report_data_list = 'CommitteeReport/getOrgFiledReportDataList'
+get_org_filed_report_amend_history = 'CommitteeReport/getOrgFiledReportAmendHistory/'
+
+# Committee Document
+get_all_org_documents_data_list = 'CommitteeDocuments/getAllOrgDocumentsDataList'
