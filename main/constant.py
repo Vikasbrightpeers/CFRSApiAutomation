@@ -41,7 +41,8 @@ dev_login_committee_payload = {
 
 dev_login_admin_payload = {
     "userName": DEV_ADMIN_USERNAME,
-    "password": DEV_ADMIN_PASSWORD
+    "password": DEV_ADMIN_PASSWORD,
+    "systemTypeCode": "CFS"
 }
 
 test_login_committee_payload = {
@@ -1396,4 +1397,101 @@ get_all_org_documents_data_list_payload = {
     "sortColumn": "",
     "sortDirection": "",
     "privacyTypeCode": "AD,PR"
+}
+
+
+delete_document_payload = {
+  "docId": ""
+}
+
+generate_administration_report_payload = {
+    "reportType": "FLN",
+    "reportSubType": "UFLD_RP",
+    "reportFormat": "PDF",
+    "reportRequest": {
+        "DueBeginDate": "",
+        "DueEndDate": ""
+    }
+}
+
+# Audit Review
+get_all_transaction_for_audit_review_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10
+}
+
+get_all_report_for_audit_review_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "filedEndDate": None,
+    "filedStartDate": None,
+    "complianceType": None,
+    "entityID": "",
+    "committeeName": "",
+    "reportName": "",
+    "committeeType": "",
+    "violationStatus": "",
+    "reportVersion": "",
+    "complianceStatus": ""
+}
+
+add_edit_violation_payload = {
+    "violationDate": "",
+    "violationStatusCode": "",
+    "violationAmount": "",
+    "orgComplianceID": "",
+    "orgID": ""
+}
+
+add_edit_violation_payment_payload = {
+    "payerFirstName": generate_first_name(),
+    "payerMiddleName": generate_middle_name(),
+    "payerLastName": generate_last_name(),
+    "paymentDate": "",
+    "paymentTypeCode": "",
+    "paymentAmount": "",
+    "violationID": "",
+    "orgComplianceID": "",
+    "orgID": ""
+}
+
+edit_violation_payment_payload = {
+    "payerFirstName": generate_first_name(),
+    "payerMiddleName": generate_middle_name(),
+    "payerLastName": generate_last_name(),
+    "paymentDate": "",
+    "paymentTypeCode": "",
+    "paymentAmount": "",
+    "paymentID": ""
+}
+
+get_all_violation_payment_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "violationID": ""
+}
+
+update_compliance_status_payload = {
+    "complianceStatusCode": "OP",
+    "orgComplianceIDs": [
+        {
+            "orgComplianceID": 1006
+        }
+    ]
+}
+
+
+add_edit_violation_waiver_payload = {
+    "waiverDecisionTypeCode": "GT",
+    "decisionDate": "2025-02-25",
+    "hearingDate": "2025-02-25",
+    "staffComment": "",
+    "requestorComment": "",
+    "requestDate": "2025-02-25",
+    "requestorLastName": "Mangukia",
+    "requestorMiddleName": "",
+    "requestorFirstName": "Vikas",
+    "waiverRequestTypeCode": "IL",
+    "orgID": 3,
+    "orgComplianceID": 1006
 }

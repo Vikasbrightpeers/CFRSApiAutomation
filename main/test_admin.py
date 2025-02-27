@@ -1,4 +1,5 @@
 from utils import *
+
 #
 # # Set up Chrome options
 # chrome_options = Options()
@@ -335,7 +336,7 @@ def test_api_admin_committee_report_001_002():
 
 # Committee Documents
 # Get All Org Documents Data List
-def test_api_admin_committee_api_admin_committee_documents_001_002():
+def test_api_admin_committee_documents_001_002_003_004():
     try:
         authorization_token = get_token(dev_login_admin_payload)
         # Get All Org Documents Data List
@@ -352,13 +353,39 @@ def test_api_admin_committee_api_admin_committee_documents_001_002():
         logging.info(f"Org Documents Data List Total Records:" f" {data.get("responseData", {}).get("totalRecords")}")
         logging.info("Org Documents Data List Fetched Succesfully")
 
+        # Get Org Documents By Document ID
+        logging.info("------- Get Org Documents By Document ID -------")
+        response = requests.get(dev_admin_url + get_org_documents_by_document_id + "1011",
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        logging.info(response.status_code)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Document Name:" f" {data.get("responseData", {}).get("documentName")}")
+        logging.info("Org Documents Details By Document ID Fetched Succesfully")
+
+    #     Delete Org Document
+        logging.info("------- Delete Org Document -------")
+        payload = delete_document_payload.copy()
+        payload["docId"] = 1011
+        response = requests.post(dev_admin_url + delete_org_document,
+                                 headers={'Content-Type': 'application/json', 'Authorization': authorization_token},
+                                 data=json.dumps(payload))
+        data = response.json()
+        logging.info(data)
+        logging.info(response.status_code)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Message:" f" {data.get("message", {})}")
+        logging.info("Documents Deleted Succesfully")
+
     except Exception as e:
         logging.error(f"Error in test_api_admin_committee_documents_001_002: {e}")
         raise e
 
 
 # Committee registration
-def test_api_admin_committee_registration_001_009_010_011_012_015_016_017():
+def test_api_admin_committee_registration_001_009_010_011_015_016_017():
     try:
         authorization_token = get_admin_token()
         # Submit Committee Registration Data
@@ -430,26 +457,6 @@ def test_api_admin_committee_registration_001_009_010_011_012_015_016_017():
 
         logging.info("All Officers Information By Org ID fetched successfully.")
 
-    #     Edit Pending Org Registration Status
-        logging.info("----- Edit Pending Org Registration Status -----")
-        payload = edit_pending_org_registration_status_payload.copy()
-        payload["orgStatusCode"] = "ACTV"
-        payload["orgId"] = int(registration_id)
-
-        response = requests.post(dev_admin_url + edit_pending_org_registration_status, headers={
-            'Authorization': authorization_token, 'Content-Type': 'application/json'
-        }, data=json.dumps(payload))
-
-        response_data = response.json()
-        logging.info(response_data)
-        logging.info(f"Response Status Code: {response.status_code}")
-
-        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
-        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
-        assert response_data.get("message") == "Registration status updated successfully.", \
-            f"Unexpected message: {response_data.get('message')}"
-        logging.info("Registration status updated successfully.")
-
     #     Get all org reasons by status code for Accept_Conditionally and Reject
         status_codes = {'Accept_Conditionally': Accept_Conditionally, 'Reject': Reject}
         for status_label, status_code in status_codes.items():
@@ -485,5 +492,412 @@ def test_api_admin_committee_registration_001_009_010_011_012_015_016_017():
         logging.info("Org registration report fetched successfully.")
 
     except Exception as e:
-        logging.error(f"Error in test_post_candidate_registrations: {e}")
+        logging.error(f"Error in test_api_admin_committee_registration_001_009_010_011_012_015_016_017: {e}")
+        raise e
+
+
+def test_api_admin_committee_registration_012_013_014():
+    try:
+        authorization_token = get_admin_token()
+        # Create committee for OrgId
+        registration_id = committee_registration(authorization_token)
+
+        #  Edit Pending Org Registration Status
+        logging.info("----- Edit Pending Org Registration Status for Active-----")
+        payload = edit_pending_org_registration_status_payload.copy()
+        payload["orgStatusCode"] = "ACTV"
+        payload["orgId"] = int(registration_id)
+
+        response = requests.post(dev_admin_url + edit_pending_org_registration_status, headers={
+            'Authorization': authorization_token, 'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+        logging.info(response_data)
+        logging.info(f"Response Status Code: {response.status_code}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "Registration status updated successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info("Registration status updated successfully.")
+
+        logging.info("----- Edit Pending Org Registration Status for Accept Conditionally -----")
+        payload = edit_pending_org_registration_status_payload.copy()
+        payload["orgStatusCode"] = "CNDA"
+        payload["orgStatusReasonCode"] = "CFR"
+        payload["statusReasonComment"] = ("The Secretary of State's office has not received a CFRS Authorization for "
+                                          "this committee's account.")
+        payload["orgId"] = int(registration_id)
+
+        response = requests.post(dev_admin_url + edit_pending_org_registration_status, headers={
+            'Authorization': authorization_token, 'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+        logging.info(response_data)
+        logging.info(f"Response Status Code: {response.status_code}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "Registration status updated successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info("Registration status updated successfully.")
+
+        logging.info("----- Edit Pending Org Registration Status for Reject -----")
+        payload = edit_pending_org_registration_status_payload.copy()
+        payload["orgStatusCode"] = "RJCT"
+        payload["orgStatusReasonCode"] = "SOI"
+        payload["statusReasonComment"] = ("The statement of support or opposition in the committee's registration "
+                                          "does not provide sufficient information to indicate what the committee"
+                                          " supports or opposes.")
+        payload["orgId"] = int(registration_id)
+
+        response = requests.post(dev_admin_url + edit_pending_org_registration_status, headers={
+            'Authorization': authorization_token, 'Content-Type': 'application/json'
+        }, data=json.dumps(payload))
+
+        response_data = response.json()
+        logging.info(response_data)
+        logging.info(f"Response Status Code: {response.status_code}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "Registration status updated successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+        logging.info("Registration status updated successfully.")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_committee_registration_012_013_014: {e}")
+        raise e
+
+
+def test_api_admin_admin_report_001_002_003():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+        # Get Admin sub report type
+        report_types = ["ORG", "CAN", "FLN"]
+        for report_type in report_types:
+            logging.info(f"------- Get Admin sub report type - {report_type} -------")
+            response = requests.get(
+                f"{dev_admin_url}{admin_sub_report_type}{report_type}",
+                headers={'Authorization': authorization_token},
+                data={}
+            )
+            data = response.json()
+            logging.info(data)
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info("Admin sub report type list fetched succesfully")
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_admin_report_001_002_003: {e}")
+        raise e
+
+
+# Audit review
+def test_api_admin_audit_review_001_002_003_004_005_006_007_008_009_011_012_013_014_015():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+
+        # Get All Transaction for Audit Review Data List
+        logging.info(f"------- Get All Transaction for Audit Review Data List-------")
+        response = requests.post(dev_admin_url + get_all_transaction_for_audit_review_data_list,
+                                 headers={'Authorization': authorization_token,  'Content-Type': 'application/json'},
+                                 data=json.dumps(get_all_transaction_for_audit_review_data_list_payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Transaction for Audit Review Data List fetched succesfully")
+
+        # Get All Reports for Audit Review Data List
+        logging.info(f"------- Get All Reports for Audit Review Data List-------")
+        response = requests.post(dev_admin_url + get_all_report_for_audit_review_data_list,
+                                 headers={'Authorization': authorization_token,  'Content-Type': 'application/json'},
+                                 data=json.dumps(get_all_report_for_audit_review_data_list_payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Reports for Audit Review Data List fetched succesfully")
+
+        # Get All Committee for Audit Review Data List
+        logging.info(f"------- Get All Committee for Audit Review Data List-------")
+        response = requests.post(dev_admin_url + get_all_committee_for_audit_review_data_list,
+                                 headers={'Authorization': authorization_token,  'Content-Type': 'application/json'},
+                                 data=json.dumps(get_all_report_for_audit_review_data_list_payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Committees for Audit Review Data List fetched succesfully")
+
+        # Get compliance information by org compliance id
+        logging.info(f"------- Get compliance information by org compliance id-------")
+        response = requests.get(dev_admin_url + get_compliance_information_by_org_compliance_id + "1006",
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("orgName") == "Maller, Marsh f"
+        logging.info("compliance information by org compliance id fetched succesfully")
+
+        # Update compliance status Open/Close
+        logging.info(f"------- Update compliance status -------")
+        for status in ["OP", "CL"]:
+            logging.info(f"Updating compliance status to {status}")
+            payload = update_compliance_status_payload.copy()
+            payload["complianceStatusCode"] = status
+            response = requests.post(dev_admin_url + update_compliance_status,
+                                     headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                     data=json.dumps(payload))
+            data = response.json()
+            assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+            assert data.get("isSuccess"), "isSuccess is not True in response"
+            logging.info("Compliance Status updated successfully")
+
+        #    ------------------ Add Edit Get Violation ------------------
+        # Add  Violation
+        logging.info(f"------- Add  Violation-------")
+        payload = add_edit_violation_payload.copy()
+        payload["violationDate"] = "2025-02-25"
+        payload["violationStatusCode"] = "OP"
+        payload["violationAmount"] = 2612
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 2
+        response = requests.post(dev_admin_url + add_edit_violation,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("orgComplianceID") == 1006
+        assert data.get("responseData", {}).get("violationAmount") == 2612
+        assert data.get("message") == "Violation created successfully.", f"Unexpected message: {data.get('message')}"
+        violation_id = data.get("responseData", {}).get("violationID")
+        logging.info(f"Violation ID : {violation_id}")
+        logging.info("Violation created successfully")
+
+        # Edit  Violation
+        logging.info(f"------- Edit  Violation-------")
+        payload = add_edit_violation_payload.copy()
+        payload["violationDate"] = "2025-02-25"
+        payload["violationStatusCode"] = "OP"
+        payload["violationAmount"] = 1226
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 2
+        payload["violationID"] = violation_id
+        response = requests.post(dev_admin_url + add_edit_violation,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("orgComplianceID") == 1006
+        assert data.get("responseData", {}).get("violationAmount") == 1226
+        assert data.get("message") == "Violation updated successfully.", f"Unexpected message: {data.get('message')}"
+        logging.info("Violation updated successfully")
+
+        # Get violation by id
+        logging.info(f"------- Get violation by id-------")
+        response = requests.get(dev_admin_url + get_violation_by_id + str(violation_id),
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("violationID") == violation_id
+        assert data.get("responseData", {}).get("violationAmount") == 1226
+        logging.info("Violation data by ID  fetched succesfully")
+
+    #    ------------------ Add Edit Delete Get Violation Payment ------------------
+        logging.info(f"------- Add Violation Payment -------")
+        payload = add_edit_violation_payment_payload.copy()
+        payload["paymentDate"] = "2025-02-25"
+        payload["paymentTypeCode"] = 2
+        payload["violationID"] = violation_id
+        payload["paymentAmount"] = 2
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 3
+        response = requests.post(dev_admin_url + add_edit_violation_payment,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("paymentAmount") == 2
+        assert data.get("message") == "Violation Payment added successfully.", f"Unexpected message: {data.get('message')}"
+        payment_id = data.get("responseData", {}).get("paymentID")
+        logging.info(f"Payment ID : {payment_id}")
+        logging.info("Violation payment added successfully")
+
+    #      Edit Violation Payment
+        logging.info(f"------- Edit  Violation Payment -------")
+        payload = edit_violation_payment_payload.copy()
+        payload["paymentDate"] = "2025-02-25"
+        payload["paymentTypeCode"] = 2
+        payload["paymentAmount"] = 1
+        payload["paymentID"] = payment_id
+        response = requests.post(dev_admin_url + add_edit_violation_payment,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("paymentAmount") == 1
+        assert data.get("responseData", {}).get("paymentID") == payment_id
+        assert data.get("message") == "Violation Payment updated successfully.", f"Unexpected message: {data.get('message')}"
+        logging.info(f"Violation Payment({payment_id}) updated successfully")
+
+    #     Get violation payment by ID
+        logging.info(f"------- Get violation payment by ID -------")
+        response = requests.get(dev_admin_url + get_violation_payment_by_id + str(payment_id),
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("violationID") == violation_id
+        assert data.get("responseData", {}).get("paymentAmount") == 1
+        logging.info(f"Violation payment data by ID {payment_id} fetched succesfully")
+
+        # Get All violation payment data list
+        logging.info(f"------- Get All violation payment data list -------")
+        payload = get_all_violation_payment_data_list_payload.copy()
+        payload["violationID"] = violation_id
+        response = requests.post(dev_admin_url + get_all_violation_payment_data_list,
+                                 headers={'Authorization': authorization_token,  'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All violation payment data fetched succesfully")
+
+        #     Delete  violation payment by ID
+        logging.info(f"------- Delete violation payment by ID -------")
+        response = requests.post(dev_admin_url + delete_violation_payment + str(payment_id),
+                                 headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Violation Payment deleted successfully.", \
+            f"Unexpected message: {data.get('message')}"
+
+        logging.info(f"Violation Payment ID {payment_id} deleted successfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_audit_review_001_002_003_004_005_006_007_011_012_013_014_015: {e}")
+        raise e
+
+
+# Add Edit Get Delete Violation Waiver
+def test_api_admin_audit_review_016_017_018_019_020():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+        # Add  Violation for Add Waiver
+        logging.info(f"------- Add  Violation-------")
+        payload = add_edit_violation_payload.copy()
+        payload["violationDate"] = "2025-02-25"
+        payload["violationStatusCode"] = "OP"
+        payload["violationAmount"] = 2612
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 2
+        response = requests.post(dev_admin_url + add_edit_violation,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("orgComplianceID") == 1006
+        assert data.get("responseData", {}).get("violationAmount") == 2612
+        assert data.get("message") == "Violation created successfully.", f"Unexpected message: {data.get('message')}"
+        violation_id = data.get("responseData", {}).get("violationID")
+        logging.info(f"Violation ID : {violation_id}")
+        logging.info("Violation created successfully")
+
+        # Add  Violation Waiver
+        logging.info(f"------- Add  Violation Waiver -------")
+        payload = add_edit_violation_waiver_payload.copy()
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 2
+        payload["violationID"] = violation_id
+        payload["violationID"] = violation_id
+        response = requests.post(dev_admin_url + add_edit_violation_waiver,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Violation Waiver Added successfully.", f"Unexpected message: {data.get('message')}"
+        waiver_request_id = data.get("responseData", {}).get("waiverRequestID")
+        logging.info(f"Waiver Request ID : {waiver_request_id}")
+        logging.info("Violation Waiver Added successfully")
+
+        # Edit  Violation waiver
+        logging.info(f"------- Edit  Violation waiver -------")
+        payload = add_edit_violation_waiver_payload.copy()
+        payload["orgComplianceID"] = 1006
+        payload["orgID"] = 2
+        payload["violationID"] = violation_id
+        payload["waiverRequestID"] = waiver_request_id
+        response = requests.post(dev_admin_url + add_edit_violation_waiver,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("waiverRequestID") == waiver_request_id
+        assert data.get(
+            "message") == "Violation Waiver Updated successfully.", f"Unexpected message: {data.get('message')}"
+        logging.info(f"Violation Waiver ({waiver_request_id}) updated successfully")
+
+        #     Get violation waiver request by ID
+        logging.info(f"------- Get violation waiver request by ID -------")
+        response = requests.get(dev_admin_url + get_violation_waiver_by_id + str(waiver_request_id),
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("violationID") == violation_id
+        logging.info(f"Violation waiver request data by ID {waiver_request_id} fetched succesfully")
+
+        # Get All violation waiver request data list
+        logging.info(f"------- Get All violation waiver request data list -------")
+        payload = get_all_violation_payment_data_list_payload.copy()
+        payload["violationID"] = violation_id
+        response = requests.post(dev_admin_url + get_all_violation_waiver_data_list,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All violation waiver request data fetched succesfully")
+
+        #     Delete  violation waiver request by ID
+        logging.info(f"------- Delete violation waiver request by ID -------")
+        response = requests.post(dev_admin_url + delete_violation_waiver + str(waiver_request_id),
+                                 headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Violation Waiver Deleted successfully.", \
+            f"Unexpected message: {data.get('message')}"
+
+        logging.info(f"Violation waiver request ID {waiver_request_id} deleted successfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_audit_review_016_017_018_019_020: {e}")
         raise e

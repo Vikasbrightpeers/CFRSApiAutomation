@@ -27,6 +27,7 @@ def test_api_admin_committee_registration_001():
 
         registration_id = response_data.get("responseData", {}).get("orgID")
         logging.info(f"Registration ID: {registration_id}")
+        return registration_id
 
     except Exception as e:
         logging.error(f"Error in test_post_candidate_registrations: {e}")

@@ -5,8 +5,8 @@ dev_auth_url = 'https://cfs-auth-dev.tgstechnology.net/'
 test_auth_url = 'https://test-cfrs-auth.tgstechnology.net/'
 qa_auth_url = 'https://cfs-auth-qa.tgstechnology.net/'
 
-# dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
-dev_admin_url = 'https://test-cfrs-admin.tgstechnology.net/api/Admin/'
+dev_admin_url = 'https://cfs-admin-dev.tgstechnology.net/api/Admin/'
+# dev_admin_url = 'https://test-cfrs-admin.tgstechnology.net/api/Admin/'
 
 qa_admin_url = 'https://cfs-admin-qa.tgstechnology.net/api/Admin/'
 
@@ -121,3 +121,32 @@ get_org_filed_report_amend_history = 'CommitteeReport/getOrgFiledReportAmendHist
 
 # Committee Document
 get_all_org_documents_data_list = 'CommitteeDocuments/getAllOrgDocumentsDataList'
+get_org_documents_by_document_id = 'CommitteeDocuments/getOrgDocumentByDocumentID/'
+delete_org_document = 'CommitteeDocuments/deleteOrgDocument'
+
+
+# Admin report
+admin_sub_report_type = 'AdminReport/GetAdminSubReportType/'
+generate_administration_report = 'AdminReport/generateAdministrationReport/'
+
+# Audit Review
+
+get_all_transaction_for_audit_review_data_list = 'AuditReview/getAllTransactionForAuditReviewDataList'
+get_all_report_for_audit_review_data_list = 'AuditReview/getAllReportForAuditReviewDataList'
+get_all_committee_for_audit_review_data_list = 'AuditReview/getAllCommitteeForAuditReviewDataList'
+get_compliance_information_by_org_compliance_id = 'AuditReview/getComplianceInformationByOrgComplianceId/'
+
+get_violation_by_id = 'AuditReview/getViolationById/'
+add_edit_violation = 'AuditReview/addEditViolation/'
+
+add_edit_violation_payment = 'AuditReview/addEditViolationPayment/'
+get_violation_payment_by_id = 'AuditReview/getViolationPaymentById/'
+get_all_violation_payment_data_list = 'AuditReview/getAllViolationPaymentDataList/'
+delete_violation_payment = 'AuditReview/deleteViolationPayment/'
+
+update_compliance_status = 'AuditReview/updateComplianceStatus/'
+
+add_edit_violation_waiver = 'AuditReview/addEditViolationWaiver/'
+get_violation_waiver_by_id = 'AuditReview/getViolationWaiverById/'
+get_all_violation_waiver_data_list = 'AuditReview/getAllViolationWaiverDataList/'
+delete_violation_waiver = 'AuditReview/deleteViolationWaiverById/'

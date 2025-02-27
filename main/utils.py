@@ -103,5 +103,37 @@ def register_user_from_admin(is_admin):
 
     except Exception as e:
         logging.error(f"Error in register_user: {e}")
-        logging.info(response.text)
+        # logging.info(response.text)
         return False, e
+
+
+def committee_registration(authorization_token):
+    try:
+        """
+            Function to register a new candidate committee, Returns the org id.
+        """
+
+        response = requests.post(dev_admin_url + post_registration, headers={
+            'Authorization': authorization_token,
+            'Content-Type': 'application/json'
+        }, data=post_random_candidate_registration_payload)
+
+        response_data = response.json()
+
+        logging.info(f"Response Status Code: {response.status_code}")
+        # logging.info(f"Response Body: {response.text}")
+
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert response_data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert response_data.get("message") == "Candidate Registration created successfully.", \
+            f"Unexpected message: {response_data.get('message')}"
+
+        logging.info("Candidate Registration added successfully with correct response.")
+
+        registration_id = response_data.get("responseData", {}).get("orgID")
+        logging.info(f"Registration ID: {registration_id}")
+        return registration_id
+
+    except Exception as e:
+        logging.error(f"Error in test_post_candidate_registrations: {e}")
+        raise e
