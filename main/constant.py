@@ -1480,7 +1480,6 @@ update_compliance_status_payload = {
     ]
 }
 
-
 add_edit_violation_waiver_payload = {
     "waiverDecisionTypeCode": "GT",
     "decisionDate": "2025-02-25",

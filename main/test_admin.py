@@ -146,8 +146,7 @@ def test_api_admin_notification_008_009():
         raise e
 
 
-# Committee Summary
-# Get Org Details For Correct Registration By Org ID and Submit Correct Registration
+# Committee Summary - Get Org Details For Correct Registration By Org ID and Submit Correct Registration
 def test_api_admin_committee_summary_001_002():
     try:
         # Register new committee to get ID
@@ -208,8 +207,7 @@ def test_api_admin_committee_summary_001_002():
         raise e
 
 
-# Committee Transaction
-# Get Contribution and Expenditure Chart Data
+# Committee Transaction - Get Contribution and Expenditure Chart Data
 def test_api_admin_committee_transaction_001_002():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -248,8 +246,7 @@ def test_api_admin_committee_transaction_001_002():
         raise e
 
 
-# correspondence
-# Get correspondence data list, org info for correspondence data list, Add correspondence
+# correspondence - Get correspondence data list, org info for correspondence data list, Add correspondence
 def test_api_admin_correspondence_001_002_003():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -293,8 +290,7 @@ def test_api_admin_correspondence_001_002_003():
         raise e
 
 
-# Committee Report
-# Get org filed report data list
+# Committee Report - Get org filed report data list
 def test_api_admin_committee_report_001_002():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -334,8 +330,7 @@ def test_api_admin_committee_report_001_002():
         raise e
 
 
-# Committee Documents
-# Get All Org Documents Data List
+# Committee Documents -  Get All Org Documents Data List
 def test_api_admin_committee_documents_001_002_003_004():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -572,6 +567,7 @@ def test_api_admin_committee_registration_012_013_014():
         raise e
 
 
+# Admin Report
 def test_api_admin_admin_report_001_002_003():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -733,7 +729,8 @@ def test_api_admin_audit_review_001_002_003_004_005_006_007_008_009_011_012_013_
         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
         assert data.get("isSuccess") is True, "isSuccess is not True in response"
         assert data.get("responseData", {}).get("paymentAmount") == 2
-        assert data.get("message") == "Violation Payment added successfully.", f"Unexpected message: {data.get('message')}"
+        assert data.get("message") == "Violation Payment added successfully.", \
+            f"Unexpected message: {data.get('message')}"
         payment_id = data.get("responseData", {}).get("paymentID")
         logging.info(f"Payment ID : {payment_id}")
         logging.info("Violation payment added successfully")
@@ -754,7 +751,8 @@ def test_api_admin_audit_review_001_002_003_004_005_006_007_008_009_011_012_013_
         assert data.get("isSuccess") is True, "isSuccess is not True in response"
         assert data.get("responseData", {}).get("paymentAmount") == 1
         assert data.get("responseData", {}).get("paymentID") == payment_id
-        assert data.get("message") == "Violation Payment updated successfully.", f"Unexpected message: {data.get('message')}"
+        assert data.get("message") == "Violation Payment updated successfully.", \
+            f"Unexpected message: {data.get('message')}"
         logging.info(f"Violation Payment({payment_id}) updated successfully")
 
     #     Get violation payment by ID
@@ -840,7 +838,8 @@ def test_api_admin_audit_review_016_017_018_019_020():
         data = response.json()
         assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
         assert data.get("isSuccess") is True, "isSuccess is not True in response"
-        assert data.get("message") == "Violation Waiver Added successfully.", f"Unexpected message: {data.get('message')}"
+        assert data.get("message") == "Violation Waiver Added successfully.", \
+            f"Unexpected message: {data.get('message')}"
         waiver_request_id = data.get("responseData", {}).get("waiverRequestID")
         logging.info(f"Waiver Request ID : {waiver_request_id}")
         logging.info("Violation Waiver Added successfully")
