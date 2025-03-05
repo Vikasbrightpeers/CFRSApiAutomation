@@ -1494,3 +1494,138 @@ add_edit_violation_waiver_payload = {
     "orgID": 3,
     "orgComplianceID": 1006
 }
+
+# Reporting Schedule
+# Election
+add_edit_election_payload = {
+    "isActive": True,
+    "allJurisdiction": "",
+    "electionName": generate_first_name() + " Election",
+    "jurisdictionCode": "",
+    "electionTypeCode": "",
+    "primaryDate": "",
+    "electionDate": "",
+    "electionCategoryCode": ""
+}
+
+get_all_election_data_list_payload = {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "jurisdiction": "",
+    "searchKeyword": "",
+    "sortColumn": "",
+    "sortDirection": ""
+}
+
+# Reporting Cycle
+add_edit_reporting_cycle_payload = {
+    "isActive": True,
+    "allJurisdiction": False,
+    "description": generate_first_name() + " Reporting Cycle",
+    "electionid": "1003",
+    "periodStartDate": "2025-03-01",
+    "periodEndDate": "2025-03-31",
+    "regStartDate": "2025-03-01",
+    "regEndDate": "2025-03-31",
+    "regDueDate": "2025-03-31",
+    "orgTypes": [
+        {
+            "orgTypeCode": "101",
+            "orgSubTypeCode": "CNDT"
+        },
+        {
+            "orgTypeCode": "101",
+            "orgSubTypeCode": "PCND"
+        },
+        {
+            "orgTypeCode": "102",
+            "orgSubTypeCode": None
+        }
+    ],
+    "jurisdictionType": "ST",
+    "offices": [
+        {
+            "officeTypeCode": "ST",
+            "countyID": None,
+            "officeID": 2602,
+            "districtID": None
+        },
+        {
+            "officeTypeCode": "ST",
+            "countyID": None,
+            "officeID": 292,
+            "districtID": None
+        }
+    ]
+}
+
+# Reporting Period
+add_edit_reporting_period_payload = {
+    "isActive": True,
+    "description": generate_first_name() + " Reporting period",
+    "isReportWaived": True,
+    "electionid": "",
+    "reportingCycleID": "",
+    "formType": "",
+    "reportingPeriodType": "",
+    "reportTypeCode": "",
+    "beginDate": "",
+    "endDate": "",
+    "allowableFilingPeriodBeginDate": "",
+    "dueDate": "",
+    "orgTypes": [
+        {
+            "orgTypeCode": "101",
+            "orgSubTypeCode": "CNDT",
+            "orgTypeDesc": "Candidate",
+            "orgSubTypeDesc": "Candidate"
+        },
+        {
+            "orgTypeCode": "101",
+            "orgSubTypeCode": "PCND",
+            "orgTypeDesc": "Candidate",
+            "orgSubTypeDesc": "Pre - Candidate"
+        },
+        {
+            "orgTypeCode": "102",
+            "orgSubTypeCode": None,
+            "orgTypeDesc": "Political Action Committee",
+            "orgSubTypeDesc": None
+        }
+    ],
+    "jurisdictionType": "ST",
+    "offices": [
+        {
+            "officeTypeCode": "ST",
+            "countyID": None,
+            "officeID": 2602,
+            "districtID": None,
+            "officeName": "Undeclared",
+            "district": None
+        },
+        {
+            "officeTypeCode": "ST",
+            "countyID": None,
+            "officeID": 292,
+            "districtID": None,
+            "officeName": "Governor",
+            "district": None
+        },
+        {
+            "officeTypeCode": "ST",
+            "countyID": None,
+            "officeID": 294,
+            "districtID": None,
+            "officeName": "Secretary of State",
+            "district": None
+        },
+        {
+              "officeTypeCode": "ST",
+              "countyID": None,
+              "officeID": 295,
+              "districtID": None,
+              "officeName": "State  Auditor",
+              "district": None
+        }
+    ]
+}

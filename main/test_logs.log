@@ -1,11 +1,9 @@
 INFO     root:utils.py:14 Token fetched successfully.
-INFO     root:test_admin.py:215 ------- Get Contribution Chart Data -------
-INFO     root:test_admin.py:225 Name: By Contributor Type, Total Amount: 300015456043409.6
-INFO     root:test_admin.py:225 Name: By Committee Type, Total Amount: 300015456043409.6
-INFO     root:test_admin.py:225 Name: By Contribution Type, Total Amount: 300015456043409.6
-INFO     root:test_admin.py:228 Contribution Chart Data Fetched succesfully
-INFO     root:test_admin.py:230 ------- Get Expenditure Chart Data -------
-INFO     root:test_admin.py:240 Name: By Recipient Type, Total Amount: 32263078.0
-INFO     root:test_admin.py:240 Name: By Committee Type, Total Amount: 32263078.0
-INFO     root:test_admin.py:240 Name: By Purpose Type, Total Amount: 32263078.0
-INFO     root:test_admin.py:243 Expenditure Chart Data Fetched succesfully
+INFO     root:test_admin.py:1088 ------- Add Election-------
+INFO     root:test_admin.py:1103 Election ID : 2025
+INFO     root:test_admin.py:1106 ------- Add Reporting Cycle -------
+INFO     root:test_admin.py:1122 Reporting Cycle ID : 1022
+INFO     root:test_admin.py:1123 Reporting Cycle created successfully.
+INFO     root:test_admin.py:1126 ------- Add Reporting Period -------
+INFO     root:test_admin.py:1146 Reporting Period ID : 2020
+INFO     root:test_admin.py:1147 Reporting Period created successfully.

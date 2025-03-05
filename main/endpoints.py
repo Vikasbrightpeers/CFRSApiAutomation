@@ -150,3 +150,23 @@ add_edit_violation_waiver = 'AuditReview/addEditViolationWaiver/'
 get_violation_waiver_by_id = 'AuditReview/getViolationWaiverById/'
 get_all_violation_waiver_data_list = 'AuditReview/getAllViolationWaiverDataList/'
 delete_violation_waiver = 'AuditReview/deleteViolationWaiverById/'
+
+# Reporting Schedule
+# Election
+add_edit_election = 'ReportingSchedule/addEditElection'
+get_election_by_id = 'ReportingSchedule/getElectionById/'
+delete_election_by_id = 'ReportingSchedule/DeleteElectionById/'
+get_all_election_data_list = 'ReportingSchedule/getAllElectionDataList'
+
+# Reporting Cycle
+add_edit_reporting_cycle = 'ReportingSchedule/addEditReportingCycle'
+get_reporting_cycle_by_id = 'ReportingSchedule/getReportingCycleById/'
+delete_reporting_cycle_by_id = 'ReportingSchedule/DeleteReportingCycleById/'
+get_all_reporting_cycle_data_list = 'ReportingSchedule/getAllReportingCycleDataList'
+
+
+# Reporting Period
+add_edit_reporting_period = 'ReportingSchedule/addEditRepotingPeriod'
+get_reporting_period_by_id = 'ReportingSchedule/getReportingPeriodById/'
+delete_reporting_period_by_id = 'ReportingSchedule/DeleteReportingPeriodById/'
+get_all_reporting_period_data_list = 'ReportingSchedule/getAllReportingPeriodDataList'

@@ -1,11 +1,5 @@
 from utils import *
 
-#
-# # Set up Chrome options
-# chrome_options = Options()
-# # chrome_options.add_argument("--headless")  # Optional: run Chrome in headless mode
-# chrome_options.add_argument("--no-sandbox")
-# chrome_options.add_argument("--disable-dev-shm-usage")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -65,7 +59,7 @@ def test_api_admin_notification_003():
         raise e
 
 
-# Add, Update, Get By ID, Delete
+# Add, Update, Get By ID, Delete Notification
 def test_api_admin_notification_004_005_006_007():
     try:
         authorization_token = get_token(dev_login_admin_payload)
@@ -375,7 +369,7 @@ def test_api_admin_committee_documents_001_002_003_004():
         logging.info("Documents Deleted Succesfully")
 
     except Exception as e:
-        logging.error(f"Error in test_api_admin_committee_documents_001_002: {e}")
+        logging.error(f"Error in test_api_admin_committee_documents_001_002_003_004: {e}")
         raise e
 
 
@@ -899,4 +893,315 @@ def test_api_admin_audit_review_016_017_018_019_020():
 
     except Exception as e:
         logging.error(f"Error in test_api_admin_audit_review_016_017_018_019_020: {e}")
+        raise e
+
+
+# Reporting Schedule
+# Add Edit Get Delete Election
+def test_api_admin_reporting_schedule_001_002_003_004():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+        # Add Election
+        logging.info(f"------- Add Election-------")
+        payload = add_edit_election_payload.copy()
+        payload["allJurisdiction"] = False
+        payload["jurisdictionCode"] = "CO"
+        payload["electionTypeCode"] = "G"
+        payload["primaryDate"] = "2025-03-03"
+        payload["electionDate"] = "2025-03-03"
+        payload["electionCategoryCode"] = "C"
+        response = requests.post(dev_admin_url + add_edit_election,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Election created successfully.", f"Unexpected message: {data.get('message')}"
+        election_id = data.get("responseData", {}).get("electionID")
+        logging.info(f"Election Name : {data.get("responseData", {}).get("electionName")}")
+        logging.info(f"Election ID : {election_id}")
+        logging.info("Election created successfully")
+
+        # Edit Election
+        logging.info(f"------- Edit Election -------")
+        payload["allJurisdiction"] = False
+        payload["jurisdictionCode"] = "CO"
+        payload["electionTypeCode"] = "G"
+        payload["primaryDate"] = "2025-03-03"
+        payload["electionDate"] = "2025-03-03"
+        payload["electionCategoryCode"] = "C"
+        payload["electionID"] = election_id
+        response = requests.post(dev_admin_url + add_edit_election,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("electionID") == election_id
+        assert data.get("message") == "Election updated successfully.", f"Unexpected message: {data.get('message')}"
+        logging.info(f"Election ID : ({election_id}) updated successfully")
+        # Get Election by ID - Not implemented
+        # logging.info(f"------- Get Election by ID -------")
+        # response = requests.get(dev_admin_url + get_election_by_id + str(election_id),
+        #                         headers={'Authorization': authorization_token}, data={})
+        # data = response.json()
+        # assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        # assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        # assert data.get("responseData", {}).get("electionID") == election_id
+        # logging.info(f"Election By ID {election_id} fetched succesfully")
+
+        # Delete Election by ID
+        logging.info(f"------- Delete Election by ID -------")
+        response = requests.post(dev_admin_url + delete_election_by_id + str(election_id),
+                                 headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData") == "deleted successfully.", \
+            f"Unexpected message: {data.get('message')}"
+        logging.info(f"Election ID: {election_id} deleted successfully")
+
+        # Get All Election Data List
+        logging.info(f"------- Get All Election Data List -------")
+        response = requests.post(dev_admin_url + get_all_election_data_list,
+                                 headers={'Content-Type': 'application/json', 'Authorization': authorization_token},
+                                 data=json.dumps(get_all_election_data_list_payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Election Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Election Data List Fetched succesfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_reporting_schedule_001_002_003_004: {e}")
+        raise e
+
+
+# Add, Edit, Get by ID, Get, Delete Reporting Cycle
+def test_api_admin_reporting_schedule_005_006_007_008_009():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+        # Add Election to use while creating the R.C
+        logging.info(f"------- Add Election-------")
+        payload = add_edit_election_payload.copy()
+        payload["allJurisdiction"] = False
+        payload["jurisdictionCode"] = "CO"
+        payload["electionTypeCode"] = "G"
+        payload["primaryDate"] = "2025-03-03"
+        payload["electionDate"] = "2025-03-03"
+        payload["electionCategoryCode"] = "C"
+        response = requests.post(dev_admin_url + add_edit_election,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        election_id = data.get("responseData", {}).get("electionID")
+        logging.info(f"Election ID : {election_id}")
+
+        # Add Reporting Cycle
+        logging.info(f"------- Add Reporting Cycle -------")
+        payload = add_edit_reporting_cycle_payload.copy()
+        payload["electionid"] = election_id
+        payload["periodStartDate"] = "2025-03-01"
+        payload["periodEndDate"] = "2025-03-31"
+        payload["regStartDate"] = "2025-03-01"
+        payload["regEndDate"] = "2025-03-03"
+        payload["regDueDate"] = "2025-03-31"
+        response = requests.post(dev_admin_url + add_edit_reporting_cycle,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        # logging.info(data)
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Reporting Cycle created successfully.", f"Unexpected message: {data.get('message')}"
+        reporting_cycle_id = data.get("responseData", {}).get("reportingCycleID")
+        logging.info(f"Reporting Cycle Name: {data.get("responseData", {}).get("description")}")
+        logging.info(f"Reporting Cycle ID : {reporting_cycle_id}")
+        logging.info("Reporting Cycle created successfully.")
+
+        # Edit Reporting Cycle
+        logging.info(f"------- Edit Reporting Cycle -------")
+        payload["allJurisdiction"] = False
+        payload["jurisdictionCode"] = "CO"
+        payload["electionTypeCode"] = "G"
+        payload["primaryDate"] = "2025-03-03"
+        payload["electionDate"] = "2025-03-03"
+        payload["electionCategoryCode"] = "C"
+        payload["reportingCycleID"] = reporting_cycle_id
+        response = requests.post(dev_admin_url + add_edit_reporting_cycle,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("reportingCycleID") == reporting_cycle_id
+        assert data.get("message") == "Reporting Cycle updated successfully.", \
+            f"Unexpected message: {data.get('message')}"
+        logging.info(f"Reporting Cycle : ({reporting_cycle_id}) updated successfully")
+
+        # Get Reporting Cycle by ID
+        logging.info(f"------- Get Reporting Cycle By ID -------")
+        response = requests.get(dev_admin_url + get_reporting_cycle_by_id + str(reporting_cycle_id),
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("reportingCycleID") == reporting_cycle_id
+        logging.info(f"Reporting Cycle By ID {reporting_cycle_id} fetched succesfully")
+
+        # Delete Reporting Cycle by ID
+        logging.info(f"------- Delete Reporting Cycle by ID -------")
+        response = requests.post(dev_admin_url + delete_reporting_cycle_by_id + str(reporting_cycle_id),
+                                 headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData") == "deleted successfully.", \
+            f"Unexpected message: {data.get('message')}"
+        logging.info(f"Reporting Cycle: {reporting_cycle_id} deleted successfully")
+
+        # Get All Reporting Cycle Data List
+        logging.info(f"------- Get All Reporting Cycle Data List -------")
+        response = requests.post(dev_admin_url + get_all_reporting_cycle_data_list,
+                                 headers={'Content-Type': 'application/json', 'Authorization': authorization_token},
+                                 data=json.dumps(get_all_election_data_list_payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Reporting Cycle Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Reporting Cycle Data List Fetched succesfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_reporting_schedule_005_006_007_008_009: {e}")
+        raise e
+
+
+# Add, Edit, Get by ID, Get, Delete Reporting Period
+def test_api_admin_reporting_schedule_010_011_012_013_014():
+    try:
+        authorization_token = get_token(dev_login_admin_payload)
+        # Add Election to use while creating the R.C
+        logging.info(f"------- Add Election-------")
+        payload = add_edit_election_payload.copy()
+        payload["allJurisdiction"] = False
+        payload["jurisdictionCode"] = "CO"
+        payload["electionTypeCode"] = "G"
+        payload["primaryDate"] = "2025-03-03"
+        payload["electionDate"] = "2025-03-03"
+        payload["electionCategoryCode"] = "C"
+        response = requests.post(dev_admin_url + add_edit_election,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        election_id = data.get("responseData", {}).get("electionID")
+        logging.info(f"Election ID : {election_id}")
+
+        # Add Reporting Cycle to use while creating the Reporting Period
+        logging.info(f"------- Add Reporting Cycle -------")
+        payload = add_edit_reporting_cycle_payload.copy()
+        payload["electionid"] = election_id
+        payload["periodStartDate"] = "2025-03-01"
+        payload["periodEndDate"] = "2025-03-31"
+        payload["regStartDate"] = "2025-03-01"
+        payload["regEndDate"] = "2025-03-03"
+        payload["regDueDate"] = "2025-03-31"
+        response = requests.post(dev_admin_url + add_edit_reporting_cycle,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("message") == "Reporting Cycle created successfully.", f"Unexpected message: {data.get('message')}"
+        reporting_cycle_id = data.get("responseData", {}).get("reportingCycleID")
+        logging.info(f"Reporting Cycle ID : {reporting_cycle_id}")
+        logging.info("Reporting Cycle created successfully.")
+        # ------------------------------------------------------------------------------------------
+        # Add Reporting Period
+        logging.info(f"------- Add Reporting Period -------")
+        payload = add_edit_reporting_period_payload.copy()
+        payload["electionid"] = election_id
+        payload["reportingCycleID"] = reporting_cycle_id
+        payload["formType"] = "201"
+        payload["reportingPeriodType"] = "OPT"
+        payload["reportTypeCode"] = "1007"
+        payload["beginDate"] = "2025-03-03"
+        payload["endDate"] = "2025-03-31"
+        payload["allowableFilingPeriodBeginDate"] = "2025-03-04"
+        payload["dueDate"] = "2025-04-29"
+        response = requests.post(dev_admin_url + add_edit_reporting_period,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get(
+            "message") == "Reporting Period created successfully.", f"Unexpected message: {data.get('message')}"
+        reporting_period_id = data.get("responseData", {}).get("reportingPeriodID")
+        logging.info(f"Reporting Period ID : {reporting_period_id}")
+        logging.info("Reporting Period created successfully.")
+
+        # Edit Reporting Period
+        logging.info(f"------- Edit Reporting Period -------")
+        payload = add_edit_reporting_period_payload.copy()
+        payload["electionid"] = election_id
+        payload["reportingCycleID"] = reporting_cycle_id
+        payload["formType"] = "201"
+        payload["reportingPeriodType"] = "OPT"
+        payload["reportTypeCode"] = "1007"
+        payload["beginDate"] = "2025-03-03"
+        payload["endDate"] = "2025-03-31"
+        payload["allowableFilingPeriodBeginDate"] = "2025-03-04"
+        payload["dueDate"] = "2025-04-29"
+        payload["reportingPeriodID"] = reporting_period_id
+        response = requests.post(dev_admin_url + add_edit_reporting_period,
+                                 headers={'Authorization': authorization_token, 'Content-Type': 'application/json'},
+                                 data=json.dumps(payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("reportingPeriodID") == reporting_period_id
+        assert data.get("message") == "Reporting Period updated successfully.", \
+            f"Unexpected message: {data.get('message')}"
+        logging.info(f"Reporting Period : ({reporting_period_id}) updated successfully")
+
+        # Get Reporting Period by ID
+        logging.info(f"------- Get Reporting Period By ID -------")
+        response = requests.get(dev_admin_url + get_reporting_period_by_id + str(reporting_period_id),
+                                headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData", {}).get("reportingPeriodID") == reporting_period_id
+        logging.info(f"Reporting Period By ID {reporting_period_id} fetched succesfully")
+
+        # Delete Reporting Period by ID
+        logging.info(f"------- Delete Reporting Period by ID -------")
+        response = requests.post(dev_admin_url + delete_reporting_period_by_id + str(reporting_period_id),
+                                 headers={'Authorization': authorization_token}, data={})
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        assert data.get("responseData") == "deleted successfully.", \
+            f"Unexpected message: {data.get('message')}"
+        logging.info(f"Reporting Period: {reporting_period_id} deleted successfully")
+
+        # Get All Reporting Period Data List
+        logging.info(f"------- Get All Reporting Period Data List -------")
+        response = requests.post(dev_admin_url + get_all_reporting_period_data_list,
+                                 headers={'Content-Type': 'application/json', 'Authorization': authorization_token},
+                                 data=json.dumps(get_all_election_data_list_payload))
+        data = response.json()
+        assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+        assert data.get("isSuccess") is True, "isSuccess is not True in response"
+        logging.info(f"Total Reporting Period Records : {data.get("responseData", {}).get("totalRecords")}")
+        logging.info("All Reporting Period Data List Fetched succesfully")
+
+    except Exception as e:
+        logging.error(f"Error in test_api_admin_reporting_schedule_010_011_012_013_014: {e}")
         raise e
